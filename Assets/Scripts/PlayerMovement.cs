@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Transform transform;
 
     void Start()
     {
-        transform = GetComponent<Transform>();
+
     }
 
 
