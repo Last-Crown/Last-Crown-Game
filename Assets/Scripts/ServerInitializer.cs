@@ -6,23 +6,21 @@ using Quobject.SocketIoClientDotNet.Client;
 
 public class ServerInitializer : MonoBehaviour
 {
-    private Socket socket;
+    public Socket socket;
 
-    void Awake()
+    private void Awake()
     {
         socket = IO.Socket("http://localhost:7000");
-
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
             Debug.Log("Connected!");
+            socket.Emit("set name", "TestName");
         });
+    }
 
-        socket.On("shakeHand", () =>
-        { 
-            Debug.Log("Shaking");
-        });
-
-        socket.Emit("shakeHand" );
+    private void OnDestroy()
+    {
+        socket.Disconnect();
     }
 }
