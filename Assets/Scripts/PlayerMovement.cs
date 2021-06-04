@@ -7,12 +7,13 @@ public class PlayerMovement : MonoBehaviour
 {
     private Socket socket;
 
+    private void Awake()
+    {
+        socket = GameObject.Find("Server").GetComponent<ServerInitializer>().socket;
+    }
+
     void Update()
     {
-        if(socket == null)
-        {
-            socket = GameObject.Find("Server").GetComponent<ServerInitializer>().socket;
-        }
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -41,6 +42,6 @@ public class PlayerMovement : MonoBehaviour
     {
         string data = JsonUtility.ToJson((Vector2)transform.position);
 
-        socket.Emit("set pos", data);
+        socket.Emit("update pos", data);
     }
 }
