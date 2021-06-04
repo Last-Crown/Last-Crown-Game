@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Quobject.SocketIoClientDotNet.Client;
-using Newtonsoft.Json;
 using SimpleJSON;
 
 
@@ -14,18 +13,19 @@ public class ServerInitializer : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
         socket = IO.Socket("http://localhost:7000");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
             Debug.Log("Connected!");
-            socket.Emit("set name", "TestName");
+            
         });
 
         socket.On("update data", (data) =>
         {
             json = JSON.Parse(data.ToString());
-            
         });
     }
 
@@ -36,7 +36,7 @@ public class ServerInitializer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach(var value in json.Values)
+        foreach (var value in json.Values)
         {
             GameObject.Find(value["name"]).transform.position = new Vector2(value["pos"]["x"], value["pos"]["y"]);
         }
