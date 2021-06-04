@@ -5,13 +5,14 @@ using UnityEngine.EventSystems;
 
 public class JoyStick : MonoBehaviour, IEndDragHandler, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public Vector2 Dir { get; } // 조이스틱의 방향
+    // 조이스틱의 방향
+    public Vector2 Dir => JoyDirection;
 
     private Transform Stick;
     private Vector2 JoyDirection, StickFirstPos, currentPos;
     private float Radius;   // 조이스틱 배경의 가로 길이의 반
 
-    void Start()
+    private void Awake()
     {
         Stick = transform.GetChild(0);
 
@@ -20,7 +21,7 @@ public class JoyStick : MonoBehaviour, IEndDragHandler, IDragHandler, IPointerDo
         // 포지션 초기화
         StickFirstPos = currentPos = Stick.transform.position;
 
-        Radius = GetComponent<RectTransform>().sizeDelta.x * 0.45f;
+        Radius = GetComponent<RectTransform>().sizeDelta.x * 0.3f;
 
         // 캔버스 크기에대한 반지름 조절.
         float Can = transform.parent.GetComponent<RectTransform>().localScale.x;

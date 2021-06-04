@@ -8,51 +8,42 @@ public class PlayerMovement : MonoBehaviour
     private JoyStick joyStick;
     private float speed;
 
-    void Start()
+    private Socket socket;
+
+    private void Awake()
     {
         speed = 15f;
-        // TODO: search joyStick
+
+        joyStick = GameObject.Find("JoyStick").GetComponent<JoyStick>();
     }
 
 
-    void Update()
+    private void Update()
     {
-        if (Input.anyKey) move();
-        private Socket socket;
-
         if(socket == null)
         {
             socket = GameObject.Find("Server").GetComponent<ServerInitializer>().socket;
         }
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(new Vector3(0, 0.05f, 0));
-            ServerSetPos();
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(new Vector3(-0.05f, 0, 0));
-            ServerSetPos();
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(new Vector3(-0.05f , 0, 0));
-            ServerSetPos();
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(new Vector3(0.05f, 0, 0));
-            ServerSetPos();
-        }
+        if (Input.anyKey) KeyboardMove();
+        if (joyStick.Dir != Vector2.zero) JoystickMove();
     }
 
-    private void move()
+    private void KeyboardMove()
     {
         float dx = Input.GetAxis("Horizontal");
         float dy = Input.GetAxis("Vertical");
 
         transform.Translate(new Vector2(dx, dy) * speed * Time.deltaTime);
+
+        // ServerSetPos();
+    }
+
+    private void JoystickMove()
+    {
+        transform.Translate(joyStick.Dir * speed * Time.deltaTime);
+
+        // ServerSetPos();
     }
 
     private void ServerSetPos()
