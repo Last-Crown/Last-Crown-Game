@@ -9,6 +9,6 @@ public class MainSceneManaver : MonoBehaviour
     {
         string name = GameObject.Find("InputField").GetComponent<InputField>().text;
 
-        GameObject.Find("Server").GetComponent<ServerInitializer>().EmitName(name);
+        GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().EmitName(name);
     }
 }

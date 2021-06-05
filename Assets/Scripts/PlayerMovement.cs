@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        socket = GameObject.Find("Server").GetComponent<ServerInitializer>().socket;
+        socket = GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().socket;
     }
 
     void Update()

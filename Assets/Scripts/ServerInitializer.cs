@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Quobject.SocketIoClientDotNet.Client;
 using SimpleJSON;
@@ -11,12 +12,13 @@ public class ServerInitializer : MonoBehaviour
     public static ServerInitializer instance = null;
 
     public Socket socket;
+    
+    public string playerName = "";
 
     private JSONNode json = null;
     private Stack<KeyValuePair<string, JSONNode>> customEventStack = new Stack<KeyValuePair<string, JSONNode>>();
 
     private bool joinedGame = false;
-    private string playerName = "";
 
     private void Awake()
     {
@@ -29,7 +31,7 @@ public class ServerInitializer : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
 
-        socket = IO.Socket("http://localhost:7000");
+        socket = IO.Socket("http://server.hyunwoo.kim:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
@@ -88,14 +90,14 @@ public class ServerInitializer : MonoBehaviour
                 if (currentPlayerObject == null)
                 {
                     currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
+                    currentPlayerObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
                     currentPlayerObject.name = value["name"];
-                    if (playerName == value["name"])
-                    {
-                        currentPlayerObject.AddComponent<PlayerMovement>();
-                    }
                 }
 
-                currentPlayerObject.transform.position = new Vector3(value["pos"]["x"], value["pos"]["y"], 0);
+                Vector3 targetPosition = new Vector3(value["pos"]["x"], value["pos"]["y"], 0);
+                Vector3 nowPosotion = currentPlayerObject.transform.position;
+
+                currentPlayerObject.transform.position = Vector3.Lerp(nowPosotion, targetPosition, 0.5f);
             }
         }
     }
