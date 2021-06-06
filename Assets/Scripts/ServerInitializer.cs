@@ -9,10 +9,11 @@ using SimpleJSON;
 
 public class ServerInitializer : MonoBehaviour
 {
+    private const float version = 1.2f;
     public static ServerInitializer instance = null;
 
     public Socket socket;
-    
+
     public string playerName = "";
 
     private JSONNode json = null;
@@ -31,13 +32,32 @@ public class ServerInitializer : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
 
-        socket = IO.Socket("http://localhost:15555");
+        socket = IO.Socket("http://server.hyunwoo.kim:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
             Debug.Log("Connected!");
 
             customEventStack.Push(new KeyValuePair<string, JSONNode>("connected", null));
+        });
+
+        socket.On("get ver", (data) =>
+        {
+            if (data == null)
+            {
+                socket.Emit("get ver", version);
+            }
+            else
+            {
+                JSONNode parsedData = JSON.Parse(data.ToString());
+
+                if (parsedData["state"] == "ER")
+                {
+                    Debug.LogError(parsedData["data"]["message"]);
+
+                    customEventStack.Push(new KeyValuePair<string, JSONNode>("get ver", parsedData));
+                }
+            }
         });
 
         socket.On(Socket.EVENT_DISCONNECT, () =>
@@ -98,7 +118,7 @@ public class ServerInitializer : MonoBehaviour
                 Vector3 nowPosotion = currentPlayerObject.transform.position;
 
                 currentPlayerObject.transform.position = Vector3.Lerp(nowPosotion, targetPosition, 0.5f);
-                currentPlayerObject.transform.rotation = Quaternion.Euler(0, 0, value["rot"]);
+                currentPlayerObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, value["rot"]);
             }
         }
     }
@@ -122,6 +142,10 @@ public class ServerInitializer : MonoBehaviour
                 {
                     case "connected":
                         SceneManager.LoadScene("MainScene");
+
+                        break;
+                    case "get ver":
+                        Destroy(gameObject);
 
                         break;
                     case "disconnected":

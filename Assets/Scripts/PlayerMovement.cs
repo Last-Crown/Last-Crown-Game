@@ -36,8 +36,11 @@ public class PlayerMovement : MonoBehaviour
             ServerSetPos();
         }
 
+        Vector2 lookat = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
 
-        socket.Emit("update rot", transform.localEulerAngles.z);
+        transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(lookat.y, lookat.x) * 180 / Mathf.PI -90);
+        
+        socket.Emit("update rot", transform.GetChild(0).localEulerAngles.z);
     }
 
     private void ServerSetPos()
