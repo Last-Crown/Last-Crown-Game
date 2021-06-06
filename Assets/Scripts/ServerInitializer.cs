@@ -39,24 +39,18 @@ public class ServerInitializer : MonoBehaviour
             Debug.Log("Connected!");
 
             customEventStack.Push(new KeyValuePair<string, JSONNode>("connected", null));
+            socket.Emit("get ver", version);
         });
 
         socket.On("get ver", (data) =>
         {
-            if (data == null)
-            {
-                socket.Emit("get ver", version);
-            }
-            else
-            {
-                JSONNode parsedData = JSON.Parse(data.ToString());
+            JSONNode parsedData = JSON.Parse(data.ToString());
 
-                if (parsedData["state"] == "ER")
-                {
-                    Debug.LogError(parsedData["data"]["message"]);
+            if (parsedData["state"] == "ER")
+            {
+                Debug.LogError(parsedData["data"]["message"]);
 
-                    customEventStack.Push(new KeyValuePair<string, JSONNode>("get ver", parsedData));
-                }
+                customEventStack.Push(new KeyValuePair<string, JSONNode>("get ver", parsedData));
             }
         });
 
