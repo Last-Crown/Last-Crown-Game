@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        speed = 15f;
+        speed = 10f;
 
         joyStick = GameObject.Find("JoyStick").GetComponent<JoyStick>();
     }
@@ -36,14 +36,14 @@ public class PlayerMovement : MonoBehaviour
 
         transform.Translate(new Vector2(dx, dy) * speed * Time.deltaTime);
 
-        // ServerSetPos();
+        ServerSetPos();
     }
 
     private void JoystickMove()
     {
         transform.Translate(joyStick.Dir * speed * Time.deltaTime);
 
-        // ServerSetPos();
+        ServerSetPos();
     }
 
     private void ServerSetPos()
