@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
             ServerSetPos();
         }
 
+
+        socket.Emit("update rot", transform.localEulerAngles.z);
     }
 
     private void ServerSetPos()

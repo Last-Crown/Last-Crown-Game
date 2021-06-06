@@ -31,7 +31,7 @@ public class ServerInitializer : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
 
-        socket = IO.Socket("http://server.hyunwoo.kim:15555");
+        socket = IO.Socket("http://localhost:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
@@ -98,6 +98,7 @@ public class ServerInitializer : MonoBehaviour
                 Vector3 nowPosotion = currentPlayerObject.transform.position;
 
                 currentPlayerObject.transform.position = Vector3.Lerp(nowPosotion, targetPosition, 0.5f);
+                currentPlayerObject.transform.rotation = Quaternion.Euler(0, 0, value["rot"]);
             }
         }
     }
