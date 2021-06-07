@@ -31,7 +31,6 @@ public class ServerInitializer : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-
         socket = IO.Socket("http://server.hyunwoo.kim:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
