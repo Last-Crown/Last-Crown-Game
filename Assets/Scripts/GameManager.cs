@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     {
         playerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
         playerObject.AddComponent<PlayerMovement>();
-        playerObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
+        playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
     }
 

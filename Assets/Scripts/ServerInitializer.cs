@@ -103,7 +103,7 @@ public class ServerInitializer : MonoBehaviour
                 if (currentPlayerObject == null)
                 {
                     currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
-                    currentPlayerObject.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
+                    currentPlayerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
                     currentPlayerObject.name = value["name"];
                 }
 

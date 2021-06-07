@@ -34,22 +34,33 @@ public class PlayerMovement : MonoBehaviour
         float dx = Input.GetAxis("Horizontal");
         float dy = Input.GetAxis("Vertical");
 
-        transform.Translate(new Vector2(dx, dy) * speed * Time.deltaTime);
+        transform.Translate(speed * Time.deltaTime * new Vector2(dx, dy));
 
-        ServerSetPos();
+        transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dy, dx) * 180 / Mathf.PI - 90);
+
+        ServerUpdatePos();
+        ServerUpdateRot();
     }
 
     private void JoystickMove()
     {
-        transform.Translate(joyStick.Dir * speed * Time.deltaTime);
+        transform.Translate(speed * Time.deltaTime * joyStick.Dir);
 
-        ServerSetPos();
+        transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(joyStick.Dir.y, joyStick.Dir.x) * 180 / Mathf.PI - 90);
+
+        ServerUpdatePos();
+        ServerUpdateRot();
     }
 
-    private void ServerSetPos()
+    private void ServerUpdatePos()
     {
         string data = JsonUtility.ToJson((Vector2)transform.position);
 
-        socket.Emit("set pos", data);
+        socket.Emit("update pos", data);
+    }
+
+    private void ServerUpdateRot()
+    {
+        socket.Emit("update rot", transform.GetChild(0).localEulerAngles.z);
     }
 }
