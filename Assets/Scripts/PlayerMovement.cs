@@ -6,13 +6,15 @@ using Quobject.SocketIoClientDotNet.Client;
 public class PlayerMovement : MonoBehaviour
 {
     private JoyStick joyStick;
-    private float speed;
-
     private Socket socket;
+
+    private float speed;
+    private bool serverExists;
 
     private void Awake()
     {
         speed = 10f;
+        serverExists = true;
 
         joyStick = GameObject.Find("JoyStick").GetComponent<JoyStick>();
     }
@@ -20,9 +22,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if(socket == null)
+        if (serverExists && socket == null)
         {
-            socket = GameObject.Find("Server").GetComponent<ServerInitializer>().socket;
+            GameObject server = GameObject.Find("Server") ?? null;
+            if (server == null)
+            {
+                Debug.Log("Tutorial Mode");
+                serverExists = false;
+            }
+            else
+                socket = server.GetComponent<ServerInitializer>().socket;
         }
 
         if (Input.anyKey) KeyboardMove();
@@ -38,8 +47,11 @@ public class PlayerMovement : MonoBehaviour
 
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dy, dx) * 180 / Mathf.PI - 90);
 
-        ServerUpdatePos();
-        ServerUpdateRot();
+        if (serverExists)
+        {
+            ServerUpdatePos();
+            ServerUpdateRot();
+        }
     }
 
     private void JoystickMove()
@@ -48,8 +60,11 @@ public class PlayerMovement : MonoBehaviour
 
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(joyStick.Dir.y, joyStick.Dir.x) * 180 / Mathf.PI - 90);
 
-        ServerUpdatePos();
-        ServerUpdateRot();
+        if (serverExists)
+        {
+            ServerUpdatePos();
+            ServerUpdateRot();
+        }
     }
 
     private void ServerUpdatePos()
