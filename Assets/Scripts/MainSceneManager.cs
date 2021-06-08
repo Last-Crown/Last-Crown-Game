@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainSceneManaver : MonoBehaviour
+public class MainSceneManager : MonoBehaviour
 {
     public void EmitName()
     {

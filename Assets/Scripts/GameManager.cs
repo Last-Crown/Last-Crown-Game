@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject maincamera = null;
 
+    public Text frameText = null;
+
     public ServerInitializer serverScript = null;
     public string playerName = "";
     public GameObject playerObject = null;
@@ -25,10 +27,29 @@ public class GameManager : MonoBehaviour
         playerObject.AddComponent<PlayerMovement>();
         playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
+
+        StartCoroutine(UpdateFrameText());
     }
+
+    Vector3 currentVelocity = Vector3.zero;
 
     private void Update()
     {
-        maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), 0.9f);
+        maincamera.transform.position = Vector3.SmoothDamp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), ref currentVelocity, 0.1f);
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
+    IEnumerator UpdateFrameText()
+    {
+        while(true)
+        {
+            frameText.text = (1.0f / Time.deltaTime).ToString("F1");
+
+            yield return new WaitForSeconds(1);
+        }
     }
 }
