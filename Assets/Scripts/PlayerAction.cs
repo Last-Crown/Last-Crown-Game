@@ -21,7 +21,7 @@ public class PlayerAction : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(actionPoint.position, boxSize, 0);
+                Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(actionPoint.position, boxSize, transform.GetChild(0).localEulerAngles.z);
                 foreach (var collider in collider2Ds)
                 {
                     if (collider.CompareTag("Rock"))
@@ -40,6 +40,6 @@ public class PlayerAction : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(actionPoint.position, boxSize);
+        Gizmos.DrawWireCube(actionPoint.position, boxSize); // 보여지는건 조금 이상함,,
     }
 }

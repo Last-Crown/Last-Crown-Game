@@ -26,6 +26,6 @@ public class TutorialManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), Time.deltaTime * 7);
+        maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), Time.deltaTime * 6);
     }
 }

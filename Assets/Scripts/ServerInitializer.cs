@@ -9,7 +9,7 @@ using SimpleJSON;
 
 public class ServerInitializer : MonoBehaviour
 {
-    private const float version = 1.2f;
+    private const float version = 1.3f;
     public static ServerInitializer instance = null;
 
     public Socket socket;

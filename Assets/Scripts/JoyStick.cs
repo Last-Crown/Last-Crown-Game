@@ -8,18 +8,21 @@ public class JoyStick : MonoBehaviour, IEndDragHandler, IDragHandler, IPointerDo
     // 조이스틱의 방향
     public Vector2 Dir => JoyDirection;
 
-    private Transform Stick;
-    private Vector2 JoyDirection, StickFirstPos, currentPos;
+    private RectTransform Stick;
+    private Vector2 JoyDirection;
+    public Vector2 StickFirstPos;
+    public Vector2 CurrentPos;
+
     private float Radius;   // 조이스틱 배경의 가로 길이의 반
 
     private void Awake()
     {
-        Stick = transform.GetChild(0);
+        Stick = transform.GetChild(0).GetComponent<RectTransform>();
 
         JoyDirection = Vector2.zero;
 
         // 포지션 초기화
-        StickFirstPos = currentPos = Stick.transform.position;
+        StickFirstPos = CurrentPos = Stick.localPosition;
 
         Radius = GetComponent<RectTransform>().sizeDelta.x * 0.3f;
 
@@ -31,23 +34,23 @@ public class JoyStick : MonoBehaviour, IEndDragHandler, IDragHandler, IPointerDo
     public void OnDrag(PointerEventData eventData)
     {
         // < 드래그 중 >
-        currentPos = Input.mousePosition;
-
+        CurrentPos = Input.mousePosition;
+        
         if (Input.touches.Length > 1)
         {
             // 두 개 이상 터치
             foreach (Touch touch in Input.touches)
-                if (currentPos.x > touch.position.x)
-                    currentPos = touch.position;
+                if (CurrentPos.x > touch.position.x)
+                    CurrentPos = touch.position;
         }
 
-        JoyDirection = (currentPos - StickFirstPos).normalized;
+        JoyDirection = (CurrentPos - StickFirstPos).normalized;
 
-        float distance = Vector2.Distance(currentPos, StickFirstPos);
+        float distance = Vector2.Distance(CurrentPos, StickFirstPos);
 
         if (distance > Radius)
-            currentPos = StickFirstPos + JoyDirection * Radius;
-        Stick.transform.position = currentPos;
+            CurrentPos = StickFirstPos + JoyDirection * Radius;
+        Stick.localPosition = CurrentPos;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -65,7 +68,7 @@ public class JoyStick : MonoBehaviour, IEndDragHandler, IDragHandler, IPointerDo
     public void OnPointerUp(PointerEventData eventData)
     {
         // < 터치 뗌 >
-        Stick.transform.position = StickFirstPos;
+        Stick.localPosition = StickFirstPos;
         JoyDirection = Vector2.zero;
     }
 }

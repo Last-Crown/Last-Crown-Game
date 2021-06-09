@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        speed = 10f;
+        speed = 6f;
         serverExists = true;
 
         joyStick = GameObject.Find("JoyStick").GetComponent<JoyStick>();
@@ -45,7 +45,8 @@ public class PlayerMovement : MonoBehaviour
 
         transform.Translate(speed * Time.deltaTime * new Vector2(dx, dy));
 
-        transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dy, dx) * 180 / Mathf.PI - 90);
+        if (!(dx == 0 && dy == 0))
+            transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dy, dx) * 180 / Mathf.PI - 90);
 
         if (serverExists)
         {
