@@ -31,11 +31,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(UpdateFrameText());
     }
 
-    Vector3 currentVelocity = Vector3.zero;
-
     private void Update()
     {
-        maincamera.transform.position = Vector3.SmoothDamp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), ref currentVelocity, 0.1f);
+        maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), Time.deltaTime * 6);
     }
 
     private void OnDestroy()

@@ -19,7 +19,7 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
-        seed = 300;
+        seed = Random.Range(0,999999);
         Random.InitState(seed);
 
         offset.x = Random.value * 100;
