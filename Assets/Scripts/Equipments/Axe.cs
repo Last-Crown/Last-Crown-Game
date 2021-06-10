@@ -6,8 +6,9 @@ public class Axe : Equipment
 {
     private void Awake()
     {
-        OriginPos = new Vector2(-0.4f, 0.7f);
-        OriginRot = new Vector3(0, 0, 50);
+        OriginPos = new Vector2(-0.2f, 0.8f);
+        OriginRot = new Vector3(0, 0, 90);
+        OriginScale = new Vector3(0.75f, 0.75f, 1);
     }
 
     public override void Equip(Transform hand)
@@ -15,8 +16,8 @@ public class Axe : Equipment
         base.Equip(hand);
     }
 
-    public override void UnEquip()
+    public override void Drop()
     {
-        base.UnEquip();
+        base.Drop();
     }
 }

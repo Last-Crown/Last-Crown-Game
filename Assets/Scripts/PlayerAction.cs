@@ -14,9 +14,9 @@ public class PlayerAction : MonoBehaviour
     void Awake()
     {
         // coolTime = curTime = 0.8f;
-        navRange = 2;
+        navRange = 1.2f;
         canPickEquipment = false;
-        Hands = transform.GetChild(0).GetChild(1);
+        Hands = transform.GetChild(0).GetChild(1).GetChild(0);
     }
 
     private void Start()
@@ -54,14 +54,14 @@ public class PlayerAction : MonoBehaviour
                 }
             }
 
-            if (collider2Ds.Length <= 0)
+            if (collider2Ds.Length <= transform.childCount + 1) // 자기 자신과 자식도 인식해서
             {
                 canPickEquipment = false;
                 NearByTool = null;
             }
                 
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }
