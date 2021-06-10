@@ -16,21 +16,24 @@ public class MapGenerator : MonoBehaviour
     [Header("Height Map")]
     public float[,] heightMap;
 
-    private void Start()
+    public void UpdateSeed(int _seed)
     {
-        if (seed < 0)
+        if (_seed < 0)
         {
-            seed = Random.Range(0, 999999);
+            seed = Random.Range(0, 1000000);
         }
+        else
+        {
+            seed = _seed;
+        }
+
         Random.InitState(seed);
 
         offset.x = Random.value * 100 * width;
         offset.y = Random.value * 100 * height;
-
-        GenerateMap();
     }
 
-    private void GenerateMap()
+    public void GenerateMap()
     {
         heightMap = NoiseGenerator.Generate(width, height, scale, offset);
 
@@ -60,8 +63,6 @@ public class MapGenerator : MonoBehaviour
                     newResource = Resources.Load<GameObject>("Prefabs/Resources/" + newResourceName);
                     resourceCount = Random.Range(0, 3);
                 }
-
-                Debug.Log((heightMap[i, j] > 0.6f ? "Stone" : "Grass") + " " + resourceCount);
 
                 newFloor = Instantiate(newFloor);
                 newFloor.name = newFloorName + "[" + i + "," + j + "]";

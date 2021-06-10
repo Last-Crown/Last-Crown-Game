@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (serverExists && socket == null)
         {
-            GameObject server = GameObject.Find("Server") ?? null;
+            GameObject server = GameObject.FindWithTag("Server") ?? null;
             if (server == null)
             {
                 Debug.Log("Tutorial Mode");

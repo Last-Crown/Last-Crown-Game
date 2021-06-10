@@ -9,7 +9,7 @@ using SimpleJSON;
 
 public class ServerInitializer : MonoBehaviour
 {
-    private const float version = 1.3f;
+    private const float version = 1.4f;
     public static ServerInitializer instance = null;
 
     public Socket socket;
@@ -67,6 +67,13 @@ public class ServerInitializer : MonoBehaviour
             customEventStack.Push(new KeyValuePair<string, JSONNode>("set name", parsedData));
         });
 
+        socket.On("set seed", (data) =>
+        {
+            JSONNode parsedData = JSON.Parse(data.ToString());
+
+            customEventStack.Push(new KeyValuePair<string, JSONNode>("set seed", parsedData));
+        });
+
         socket.On("delete name", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
@@ -102,7 +109,7 @@ public class ServerInitializer : MonoBehaviour
 
                 if (currentPlayerObject == null)
                 {
-                    currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
+                    currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
                     currentPlayerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
                     currentPlayerObject.name = value["name"];
                 }
@@ -166,7 +173,15 @@ public class ServerInitializer : MonoBehaviour
                             SceneManager.LoadScene("GameScene");
                             joinedGame = true;
 
+                            socket.Emit("get seed");
                         }
+
+                        break;
+                    case "set seed":
+                        MapGenerator mapGenerator = GameObject.Find("Managers").GetComponent<MapGenerator>();
+
+                        mapGenerator.UpdateSeed(currentEvent.Value);
+                        mapGenerator.GenerateMap();
 
                         break;
                     case "delete name":
