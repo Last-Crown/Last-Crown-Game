@@ -290,10 +290,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d1498c7f9f62534c9987134fae207d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: -1
+  seed: 1234
   width: 21
   height: 21
-  gridScale: 5.56
+  gridScale: 11.5
   scale: 0.5
   offset: {x: 0, y: 0}
 --- !u!4 &1258182917

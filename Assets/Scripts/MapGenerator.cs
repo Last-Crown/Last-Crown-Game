@@ -50,7 +50,7 @@ public class MapGenerator : MonoBehaviour
                     newResourceName = "Rock";
                     newFloor = Resources.Load<GameObject>("Prefabs/Floors/" + newFloorName);
                     newResource = Resources.Load<GameObject>("Prefabs/Resources/" + newResourceName);
-                    resourceCount = Random.Range(1, 2);
+                    resourceCount = Random.Range(0, 2);
                 }
                 else
                 {
@@ -58,10 +58,10 @@ public class MapGenerator : MonoBehaviour
                     newResourceName = "Tree";
                     newFloor = Resources.Load<GameObject>("Prefabs/Floors/" + newFloorName);
                     newResource = Resources.Load<GameObject>("Prefabs/Resources/" + newResourceName);
-                    resourceCount = Random.Range(1, 4);
+                    resourceCount = Random.Range(0, 3);
                 }
 
-                Debug.Log((heightMap[i, j] > 0.6f ? "Stone" : "Grass") + " " + resourceCount + " " + Random.value);
+                Debug.Log((heightMap[i, j] > 0.6f ? "Stone" : "Grass") + " " + resourceCount);
 
                 newFloor = Instantiate(newFloor);
                 newFloor.name = newFloorName + "[" + i + "," + j + "]";
@@ -71,7 +71,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     newResource = Instantiate(newResource);
                     newResource.name = newResourceName + "[" + i + "," + j + "," + k + "]";
-                    newResource.transform.position = newFloor.transform.position;
+                    newResource.transform.position = newFloor.transform.position + new Vector3(gridScale * (0.5f - Random.value), gridScale * (0.5f - Random.value));
                 }
             }
         }
