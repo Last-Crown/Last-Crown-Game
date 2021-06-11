@@ -6,7 +6,7 @@ public class Shovel : Equipment
 {
     private void Awake()
     {
-        OriginPos = new Vector2(-0.1f, 0.6f);
+        OriginPos = new Vector3(-0.1f, 0.6f, 0);
         OriginRot = new Vector3(0, 0, 90);
         OriginScale = new Vector3(0.75f, 0.75f, 1);
     }

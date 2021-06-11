@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Equipment : MonoBehaviour
 {
-    protected Vector2 OriginPos;
-    protected Vector3 OriginRot, OriginScale;
+    protected Vector3 OriginPos, OriginRot, OriginScale;
 
     public virtual void Equip(Transform hand)
     {
