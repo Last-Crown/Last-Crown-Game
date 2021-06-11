@@ -105,20 +105,23 @@ public class ServerInitializer : MonoBehaviour
         {
             foreach (var value in json.Values)
             {
-                GameObject currentPlayerObject = GameObject.Find(value["name"]);
-
-                if (currentPlayerObject == null)
+                if (value["name"] != playerName)
                 {
-                    currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
-                    currentPlayerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
-                    currentPlayerObject.name = value["name"];
+                    GameObject currentPlayerObject = GameObject.Find(value["name"]);
+
+                    if (currentPlayerObject == null)
+                    {
+                        currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
+                        currentPlayerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
+                        currentPlayerObject.name = value["name"];
+                    }
+
+                    Vector3 targetPosition = new Vector3(value["pos"]["x"], value["pos"]["y"], 0);
+                    Vector3 nowPosotion = currentPlayerObject.transform.position;
+
+                    currentPlayerObject.transform.position = Vector3.Lerp(nowPosotion, targetPosition, 0.5f);
+                    currentPlayerObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, value["rot"]);
                 }
-
-                Vector3 targetPosition = new Vector3(value["pos"]["x"], value["pos"]["y"], 0);
-                Vector3 nowPosotion = currentPlayerObject.transform.position;
-
-                currentPlayerObject.transform.position = Vector3.Lerp(nowPosotion, targetPosition, 0.5f);
-                currentPlayerObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, value["rot"]);
             }
         }
     }
