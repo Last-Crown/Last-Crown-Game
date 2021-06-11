@@ -18,6 +18,7 @@ public class ServerInitializer : MonoBehaviour
 
     private JSONNode json = null;
     private Stack<KeyValuePair<string, JSONNode>> customEventStack = new Stack<KeyValuePair<string, JSONNode>>();
+    private List<GameObject> playerObjectList = new List<GameObject>();
 
     private bool joinedGame = false;
 
@@ -107,13 +108,18 @@ public class ServerInitializer : MonoBehaviour
             {
                 if (value["name"] != playerName)
                 {
-                    GameObject currentPlayerObject = GameObject.Find(value["name"]);
+                    GameObject currentPlayerObject = playerObjectList.Find(obj =>
+                    {
+                        return obj.name == value["name"];
+                    });
 
                     if (currentPlayerObject == null)
                     {
                         currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
                         currentPlayerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
                         currentPlayerObject.name = value["name"];
+
+                        playerObjectList.Add(currentPlayerObject);
                     }
 
                     Vector3 targetPosition = new Vector3(value["pos"]["x"], value["pos"]["y"], 0);
@@ -188,6 +194,13 @@ public class ServerInitializer : MonoBehaviour
 
                         break;
                     case "delete name":
+                        GameObject currentPlayerObject = playerObjectList.Find(obj =>
+                        {
+                            return obj.name == currentEvent.Value["name"];
+                        });
+
+                        playerObjectList.Remove(currentPlayerObject);
+
                         Destroy(GameObject.Find(currentEvent.Value["name"]));
 
                         break;
