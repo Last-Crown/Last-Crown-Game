@@ -75,9 +75,12 @@ public class PlayerAction : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (WhatsInHand != eEquipment.None)
+            Equipment e = MyEquipmentsDict[WhatsInHand];
+
+            if (WhatsInHand != eEquipment.None && e.CanUse && FrontObject != null)
             {
-                MyEquipmentsDict[WhatsInHand].Use(PlayerAnim);
+                e.Use(PlayerAnim);
+                FrontObject.GetComponent<IHarvestable>().Hit(1, WhatsInHand);
             }
         }
     }

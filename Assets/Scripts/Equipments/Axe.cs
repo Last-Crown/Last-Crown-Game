@@ -9,10 +9,10 @@ public class Axe : Equipment
         Kinds = eEquipment.Axe;
 
         OriginPos = new Vector3(0.2f, 0.8f, 0);
-        OriginRot = new Vector3(0, 0, -90);
+        OriginRot = new Vector3(0, 0, 90);
         OriginScale = new Vector3(0.75f, 0.75f, 1);
 
-        CoolTime = 2;
+        CoolTime = 1;
         AnimString = "useAxe";
     }
 

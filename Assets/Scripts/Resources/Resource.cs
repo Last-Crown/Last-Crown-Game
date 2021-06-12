@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IHarvestable
+{
+    void Hit(int damage, eEquipment equipment);
+}
+
+public interface ICollectable
+{
+    void Collecte();
+}
 
 public enum eHarResource    // harvestable resource
 {
@@ -16,6 +25,7 @@ public enum eColResource    // collectable resource
 
 public class Resource : MonoBehaviour
 {
-    public eHarResource H_Kinds;
-    public eColResource C_Kinds;
+    public eEquipment MatchedTool = 0;
+    public eHarResource H_Kinds = 0;
+    public eColResource C_Kinds = 0;
 }

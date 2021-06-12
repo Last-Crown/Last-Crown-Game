@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 169261859}
   - component: {fileID: 169261858}
   - component: {fileID: 169261861}
+  - component: {fileID: 169261862}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Rock
@@ -259,6 +260,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2930089, y: 0.4139521}
   m_EdgeRadius: 0
+--- !u!114 &169261862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169261857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e10b9686abae1cb4385249a186f402fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MatchedTool: 0
+  H_Kinds: 0
+  C_Kinds: 0
 --- !u!1 &259707304
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,6 +286,7 @@ GameObject:
   - component: {fileID: 259707307}
   - component: {fileID: 259707306}
   - component: {fileID: 259707305}
+  - component: {fileID: 259707308}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Tree
@@ -368,6 +385,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &259707308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259707304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defb92b2d0c83674cb7e21fbdff362ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MatchedTool: 0
+  H_Kinds: 0
+  C_Kinds: 0
+  TreeStump: {fileID: 21300000, guid: 940b7b6b48223564d8d14c053bc55f86, type: 3}
+  Origin: {fileID: 21300000, guid: 719708869128d924e80bd7ddf8cb4130, type: 3}
 --- !u!1 &339314614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,7 +1399,7 @@ SpriteRenderer:
   m_Sprite: {fileID: 21300000, guid: 45a3c93c7a09ec841ba3e635d721ee32, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
-  m_FlipY: 0
+  m_FlipY: 1
   m_DrawMode: 0
   m_Size: {x: 1.44, y: 3.22}
   m_AdaptiveModeThreshold: 0.5
