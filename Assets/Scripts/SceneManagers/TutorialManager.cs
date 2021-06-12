@@ -10,6 +10,7 @@ public class TutorialManager : MonoBehaviour
     public GameObject playerObject;
     public string playerName;
 
+
     private void Awake()
     {
         playerName = "플레이어1";
@@ -21,6 +22,7 @@ public class TutorialManager : MonoBehaviour
     {
         playerObject.AddComponent<PlayerMovement>();
         playerObject.AddComponent<PlayerAction>();
+        playerObject.AddComponent<PlayerHealth>();
         playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
     }

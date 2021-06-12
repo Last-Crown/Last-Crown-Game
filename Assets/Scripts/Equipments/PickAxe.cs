@@ -6,7 +6,9 @@ public class PickAxe : Equipment
 {
     private void Awake()
     {
-        OriginPos = new Vector2(-0.2f, 0.6f);
+        Kinds = eEquipment.PickAxe;
+
+        OriginPos = new Vector3(-0.2f, 0.6f, 0);
         OriginRot = new Vector3(0, 0, 90);
         OriginScale = new Vector3(0.8f, 0.8f, 1);
     }
