@@ -45,9 +45,9 @@ public class GameManager : MonoBehaviour
     {
         while(true)
         {
-            frameText.text = (1.0f / Time.deltaTime).ToString("F1");
+            frameText.text = serverScript.customEventStack.Count.ToString();
 
-            yield return new WaitForSeconds(1);
+            yield return null;
         }
     }
 }
