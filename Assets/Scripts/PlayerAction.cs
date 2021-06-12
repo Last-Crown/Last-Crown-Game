@@ -55,6 +55,8 @@ public class PlayerAction : MonoBehaviour
             MyEquipmentsDict.Remove(WhatsInHand);
             ToolsList.Remove(WhatsInHand);
             WhatsInHand = eEquipment.None;
+
+            PlayerAnim.SetBool("isHold", false);
         }
 
         if (Input.GetKeyDown(KeyCode.E) && ToolsList.Count > 0)
@@ -76,11 +78,11 @@ public class PlayerAction : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Equipment e = MyEquipmentsDict[WhatsInHand];
-
-            if (WhatsInHand != eEquipment.None && e.CanUse && FrontObject != null)
+            
+            if (WhatsInHand != eEquipment.None && e.CanUse)
             {
                 e.Use(PlayerAnim);
-                FrontObject.GetComponent<IHarvestable>().Hit(1, WhatsInHand);
+                FrontObject?.GetComponent<IHarvestable>().Hit(1, WhatsInHand);
             }
         }
     }
@@ -88,10 +90,12 @@ public class PlayerAction : MonoBehaviour
     // 현재 도구에서 obj로 교체
     private void ChangeEquipment(Equipment obj)
     {
+        PlayerAnim.SetBool("isHold", true);
 
         MyEquipmentsDict[WhatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
 
         WhatsInHand = obj.Kinds;
+        
 
         if (!MyEquipmentsDict.ContainsKey(obj.Kinds)) // obj가 처음 집은 도구라면
         {
