@@ -32,32 +32,22 @@ public class ServerInitializer : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        socket = IO.Socket("http://server.hyunwoo.kim:15555");
+        socket = IO.Socket("http://192.168.0.4:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
-            Debug.Log("Connected!");
-
             customEventStack.Push(new KeyValuePair<string, JSONNode>("connected", null));
-            socket.Emit("get ver", version);
         });
 
         socket.On("get ver", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            if (parsedData["state"] == "ER")
-            {
-                Debug.LogError(parsedData["data"]["message"]);
-
-                customEventStack.Push(new KeyValuePair<string, JSONNode>("get ver", parsedData));
-            }
+            customEventStack.Push(new KeyValuePair<string, JSONNode>("get ver", parsedData));
         });
 
         socket.On(Socket.EVENT_DISCONNECT, () =>
         {
-            Debug.Log("Disconnect");
-
             customEventStack.Push(new KeyValuePair<string, JSONNode>("disconnected", null));
         });
 
@@ -84,7 +74,9 @@ public class ServerInitializer : MonoBehaviour
 
         socket.On("update data", (data) =>
         {
-            json = JSON.Parse(data.ToString());
+            JSONNode parsedData = JSON.Parse(data.ToString());
+
+            customEventStack.Push(new KeyValuePair<string, JSONNode>("update data", parsedData));
         });
 
         StartCoroutine(EventStackCheckRoot());
@@ -150,14 +142,25 @@ public class ServerInitializer : MonoBehaviour
                 switch (currentEvent.Key)
                 {
                     case "connected":
-                        SceneManager.LoadScene("MainScene");
+                        Debug.Log("Connected!");
+                        socket.Emit("get ver", version);
 
                         break;
                     case "get ver":
-                        Destroy(gameObject);
+                        if (currentEvent.Value["state"] == "ER")
+                        {
+                            Debug.LogError(currentEvent.Value["data"]["message"]);
+
+                            Destroy(gameObject);
+                        }
+                        else if (currentEvent.Value["state"] == "OK")
+                        {
+                            SceneManager.LoadScene("MainScene");
+                        }
 
                         break;
                     case "disconnected":
+                        Debug.Log("Disconnect");
                         SceneManager.LoadScene("ConnectScene");
                         foreach (var value in json.Values)
                         {
@@ -202,6 +205,10 @@ public class ServerInitializer : MonoBehaviour
                         playerObjectList.Remove(currentPlayerObject);
 
                         Destroy(GameObject.Find(currentEvent.Value["name"]));
+
+                        break;
+                    case "update data":
+                        json = currentEvent.Value;
 
                         break;
                 }
