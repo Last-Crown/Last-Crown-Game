@@ -9,15 +9,17 @@ public class PlayerAction : MonoBehaviour
 
     private Transform Hands;
     private PlayerHealth playerHealth;
-    private Dictionary<eEquipment, Equipment> MyEquipments = new Dictionary<eEquipment, Equipment>()
+
+    private LinkedList<eEquipment> ToolsList = new LinkedList<eEquipment>();
+    private Dictionary<eEquipment, Equipment> MyEquipmentsDict = new Dictionary<eEquipment, Equipment>()
     {
         { eEquipment.None, null }
     };
 
+
     public GameObject FrontObject;
 
 
-    // private float coolTime, curTime;
     private float navRange;
     public bool canPickTool;
     private int PickableLayer;
@@ -25,7 +27,6 @@ public class PlayerAction : MonoBehaviour
 
     void Awake()
     {
-        // coolTime = curTime = 0.8f;
         WhatsInHand = eEquipment.None;
 
         navRange = 1.2f;
@@ -46,29 +47,49 @@ public class PlayerAction : MonoBehaviour
         {
             ChangeEquipment(NearByTool);
         }
+
         if (Input.GetKeyDown(KeyCode.F) && WhatsInHand != eEquipment.None)
         {
-            MyEquipments[WhatsInHand].Drop();
-            MyEquipments.Remove(WhatsInHand);
+            MyEquipmentsDict[WhatsInHand].Drop();
+            MyEquipmentsDict.Remove(WhatsInHand);
+            ToolsList.Remove(WhatsInHand);
             WhatsInHand = eEquipment.None;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && ToolsList.Count > 0)
+        {
+            eEquipment obj;
+            if (WhatsInHand != eEquipment.None)
+            {
+                LinkedListNode<eEquipment> currentNode = ToolsList.Find(WhatsInHand);
+
+                // 다음 도구 enum 저장 (현재 노드가 마지막 노드이면 처음 걸로 바꿔줌)
+                obj = currentNode == ToolsList.Last ? ToolsList.First.Value : currentNode.Next.Value;
+            }
+            else
+                obj = ToolsList.First.Value;
+            
+            ChangeEquipment(MyEquipmentsDict[obj]);
         }
     }
 
     // 현재 도구에서 obj로 교체
     private void ChangeEquipment(Equipment obj)
     {
-        MyEquipments[WhatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
+
+        MyEquipmentsDict[WhatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
 
         WhatsInHand = obj.Kinds;
 
-        if (!MyEquipments.ContainsKey(obj.Kinds)) // obj가 처음 집은 도구라면
+        if (!MyEquipmentsDict.ContainsKey(obj.Kinds)) // obj가 처음 집은 도구라면
         {
             obj.Equip(Hands);
-            MyEquipments.Add(obj.Kinds, obj);
+            MyEquipmentsDict.Add(obj.Kinds, obj);
+            ToolsList.AddLast(obj.Kinds);
             return;
         }
 
-        MyEquipments[obj.Kinds].gameObject.SetActive(true);   // obj 활성화
+        MyEquipmentsDict[obj.Kinds].gameObject.SetActive(true);   // obj 활성화
     }
 
     IEnumerator NavigateAraund()
