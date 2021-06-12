@@ -11,6 +11,19 @@ public class Equipment : MonoBehaviour
     public eEquipment Kinds;    // 도구 종류
     protected Vector3 OriginPos, OriginRot, OriginScale;
 
+    protected string AnimString;
+    public float CoolTime, CurTime = 0;
+
+
+    public bool CanUse => CurTime <= 0;
+
+
+    public virtual void Update()
+    {
+        if (!CanUse)
+            CurTime -= Time.deltaTime;
+    }
+
     public virtual void Equip(Transform hand)
     {
         transform.SetParent(hand);
@@ -30,8 +43,11 @@ public class Equipment : MonoBehaviour
         gameObject.layer = LayerMask.NameToLayer("Pickable");
     }
 
-    public virtual void Use()
+    public virtual void Use(Animator anim)
     {
-        // TODO
+        if (!CanUse) return;
+
+        anim.SetTrigger(AnimString);
+        CurTime = CoolTime;
     }
 }

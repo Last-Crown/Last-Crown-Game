@@ -8,9 +8,12 @@ public class Hammer : Equipment
     {
         Kinds = eEquipment.Hammer;
 
-        OriginPos = new Vector3(-0.5f, 0.6f, 0);
-        OriginRot = new Vector3(0, 0, 90);
-        OriginScale = new Vector3(0.7f, 0.7f, 1);
+        OriginPos = new Vector3(0.5f, 0.6f, 0);
+        OriginRot = new Vector3(0, 0, -90);
+        OriginScale = new Vector3(0.6f, 0.7f, 1);
+
+        CoolTime = 2;
+        AnimString = "useAxe";
     }
 
     public override void Equip(Transform hand)

@@ -5,8 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Server
-  - Resource
   - Tool
+  - Tree
+  - Rock
   layers:
   - Default
   - TransparentFX

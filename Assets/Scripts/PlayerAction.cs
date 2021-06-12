@@ -7,7 +7,10 @@ public class PlayerAction : MonoBehaviour
     public eEquipment WhatsInHand;
     public Equipment NearByTool;
 
+
+    public GameObject FrontObject;
     private Transform Hands;
+    private Animator PlayerAnim;
     private PlayerHealth playerHealth;
 
     private LinkedList<eEquipment> ToolsList = new LinkedList<eEquipment>();
@@ -15,9 +18,6 @@ public class PlayerAction : MonoBehaviour
     {
         { eEquipment.None, null }
     };
-
-
-    public GameObject FrontObject;
 
 
     private float navRange;
@@ -32,6 +32,7 @@ public class PlayerAction : MonoBehaviour
         navRange = 1.2f;
         canPickTool = false;
         Hands = transform.GetChild(0).GetChild(1).GetChild(0);
+        PlayerAnim = GetComponent<Animator>();
         PickableLayer = 1 << LayerMask.NameToLayer("Pickable");
     }
 
@@ -70,6 +71,14 @@ public class PlayerAction : MonoBehaviour
                 obj = ToolsList.First.Value;
             
             ChangeEquipment(MyEquipmentsDict[obj]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (WhatsInHand != eEquipment.None)
+            {
+                MyEquipmentsDict[WhatsInHand].Use(PlayerAnim);
+            }
         }
     }
 
@@ -126,8 +135,13 @@ public class PlayerAction : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Resource") && FrontObject == null)
-            FrontObject = collision.gameObject;
+        if (FrontObject == null)
+        {
+            if (collision.CompareTag("Tree") || collision.CompareTag("Rock"))
+            {
+                FrontObject = collision.gameObject;
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
