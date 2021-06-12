@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        speed = 6f;
+        speed = 4.5f;
         serverExists = true;
 
         joyStick = GameObject.Find("JoyStick").GetComponent<JoyStick>();

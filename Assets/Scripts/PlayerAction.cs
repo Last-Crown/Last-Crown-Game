@@ -4,42 +4,148 @@ using UnityEngine;
 
 public class PlayerAction : MonoBehaviour
 {
-    public Transform actionPoint;
-    public Vector2 boxSize;
+    public eEquipment WhatsInHand;
+    public Equipment NearByTool;
 
 
-    private float coolTime, curTime;
+    public GameObject FrontObject;
+    private Transform Hands;
+    private Animator PlayerAnim;
+    private PlayerHealth playerHealth;
+
+    private LinkedList<eEquipment> ToolsList = new LinkedList<eEquipment>();
+    private Dictionary<eEquipment, Equipment> MyEquipmentsDict = new Dictionary<eEquipment, Equipment>()
+    {
+        { eEquipment.None, null }
+    };
+
+
+    private float navRange;
+    public bool canPickTool;
+    private int PickableLayer;
+
 
     void Awake()
     {
-        coolTime = curTime = 0.8f;
+        WhatsInHand = eEquipment.None;
+
+        navRange = 1.2f;
+        canPickTool = false;
+        Hands = transform.GetChild(0).GetChild(1).GetChild(0);
+        PlayerAnim = GetComponent<Animator>();
+        PickableLayer = 1 << LayerMask.NameToLayer("Pickable");
+    }
+
+    private void Start()
+    {
+        playerHealth = GetComponent<PlayerHealth>();
+        StartCoroutine(NavigateAraund());
     }
 
     void Update()
     {
-        if (curTime <= 0)
+        if (Input.GetKeyDown(KeyCode.Space) && canPickTool && NearByTool != null)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(actionPoint.position, boxSize, transform.GetChild(0).localEulerAngles.z);
-                foreach (var collider in collider2Ds)
-                {
-                    if (collider.CompareTag("Rock"))
-                        Debug.Log("Rock");
-                }
+            ChangeEquipment(NearByTool);
+        }
 
-                curTime = coolTime;
-            }
-        } else
+        if (Input.GetKeyDown(KeyCode.F) && WhatsInHand != eEquipment.None)
         {
-            curTime -= Time.deltaTime;
+            MyEquipmentsDict[WhatsInHand].Drop();
+            MyEquipmentsDict.Remove(WhatsInHand);
+            ToolsList.Remove(WhatsInHand);
+            WhatsInHand = eEquipment.None;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && ToolsList.Count > 0)
+        {
+            eEquipment obj;
+            if (WhatsInHand != eEquipment.None)
+            {
+                LinkedListNode<eEquipment> currentNode = ToolsList.Find(WhatsInHand);
+
+                // 다음 도구 enum 저장 (현재 노드가 마지막 노드이면 처음 걸로 바꿔줌)
+                obj = currentNode == ToolsList.Last ? ToolsList.First.Value : currentNode.Next.Value;
+            }
+            else
+                obj = ToolsList.First.Value;
+            
+            ChangeEquipment(MyEquipmentsDict[obj]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (WhatsInHand != eEquipment.None)
+            {
+                MyEquipmentsDict[WhatsInHand].Use(PlayerAnim);
+            }
         }
     }
 
-    // 박스 콜라이더 보이게 해주는 함수
-    private void OnDrawGizmos()
+    // 현재 도구에서 obj로 교체
+    private void ChangeEquipment(Equipment obj)
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(actionPoint.position, boxSize); // 보여지는건 조금 이상함,,
+
+        MyEquipmentsDict[WhatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
+
+        WhatsInHand = obj.Kinds;
+
+        if (!MyEquipmentsDict.ContainsKey(obj.Kinds)) // obj가 처음 집은 도구라면
+        {
+            obj.Equip(Hands);
+            MyEquipmentsDict.Add(obj.Kinds, obj);
+            ToolsList.AddLast(obj.Kinds);
+            return;
+        }
+
+        MyEquipmentsDict[obj.Kinds].gameObject.SetActive(true);   // obj 활성화
+    }
+
+    IEnumerator NavigateAraund()
+    {
+        while (playerHealth.IsAlive)
+        {
+            float dis = 100, temp;
+
+            // PickableMask만 탐색
+            Collider2D[] collider2Ds = Physics2D.OverlapCircleAll(transform.position, navRange, PickableLayer);
+            foreach (var col in collider2Ds)
+            {
+                // 더 가까운 것 찾음
+                temp = Vector3.Distance(transform.position, col.transform.position);
+                if (dis >= temp)
+                {
+                    dis = temp;
+                    NearByTool = col.GetComponent<Equipment>();
+                }
+            }
+
+            if (collider2Ds.Length <= 0)
+            {
+                canPickTool = false;
+                NearByTool = null;
+            }
+            else
+                canPickTool = true;
+                
+
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (FrontObject == null)
+        {
+            if (collision.CompareTag("Tree") || collision.CompareTag("Rock"))
+            {
+                FrontObject = collision.gameObject;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        FrontObject = null;
     }
 }

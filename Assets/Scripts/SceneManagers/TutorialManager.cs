@@ -10,6 +10,7 @@ public class TutorialManager : MonoBehaviour
     public GameObject playerObject;
     public string playerName;
 
+
     private void Awake()
     {
         playerName = "플레이어1";
@@ -20,12 +21,14 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         playerObject.AddComponent<PlayerMovement>();
+        playerObject.AddComponent<PlayerAction>();
+        playerObject.AddComponent<PlayerHealth>();
         playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
     }
 
     private void LateUpdate()
     {
-        maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), Time.deltaTime * 6);
+        maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), Time.deltaTime * 4.5f);
     }
 }

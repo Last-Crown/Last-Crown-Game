@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Server
+  - Tool
+  - Tree
   - Rock
   layers:
   - Default
@@ -13,7 +15,7 @@ TagManager:
   - Background
   - Water
   - UI
-  - 
+  - Pickable
   - 
   - 
   - 
