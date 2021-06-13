@@ -37,10 +37,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (Input.anyKey) KeyboardMove();
-        else PlayerAnim.SetBool("walk", false);
+        else PlayerAnim.SetBool("Walk", false);
 
         if (joyStick.Dir != Vector2.zero) JoystickMove();
-        else PlayerAnim.SetBool("walk", false);
+        else PlayerAnim.SetBool("Walk", false);
     }
 
     private void KeyboardMove()
@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.Translate(speed * Time.deltaTime * new Vector2(dx, dy));
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dy, dx) * 180 / Mathf.PI - 90);
-            PlayerAnim.SetBool("walk", true);
+            PlayerAnim.SetBool("Walk", true);
         }
             
 
@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(joyStick.Dir.y, joyStick.Dir.x) * 180 / Mathf.PI - 90);
 
-        PlayerAnim.SetBool("walk", true);
+        PlayerAnim.SetBool("Walk", true);
 
         if (serverExists)
         {
