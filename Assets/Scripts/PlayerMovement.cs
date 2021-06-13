@@ -37,10 +37,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (Input.anyKey) KeyboardMove();
-        else PlayerAnim.SetBool("Walk", false);
-
         if (joyStick.Dir != Vector2.zero) JoystickMove();
-        else PlayerAnim.SetBool("Walk", false);
+        
+        if (!Input.anyKey && joyStick.Dir == Vector2.zero) PlayerAnim.SetBool("Walk", false);
     }
 
     private void KeyboardMove()
