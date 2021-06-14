@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
+    public TutorialManager Instance => instance ??= FindObjectOfType<TutorialManager>();
+    private static TutorialManager instance;
+
     public GameObject maincamera;
 
     public GameObject playerObject;

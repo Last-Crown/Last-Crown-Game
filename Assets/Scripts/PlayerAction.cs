@@ -7,8 +7,6 @@ public class PlayerAction : MonoBehaviour
     public eEquipment WhatsInHand;
     public Equipment NearByTool;
 
-
-    public GameObject FrontObject;
     private Transform Hands;
     private Animator PlayerAnim;
     private PlayerHealth playerHealth;
@@ -82,7 +80,6 @@ public class PlayerAction : MonoBehaviour
             if (WhatsInHand != eEquipment.None && e.CanUse)
             {
                 e.Use(PlayerAnim);
-                FrontObject?.GetComponent<IHarvestable>().Hit(1, WhatsInHand);
             }
         }
     }
@@ -138,21 +135,5 @@ public class PlayerAction : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (FrontObject == null)
-        {
-            if (collision.CompareTag("Tree") || collision.CompareTag("Rock"))
-            {
-                FrontObject = collision.gameObject;
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        FrontObject = null;
     }
 }

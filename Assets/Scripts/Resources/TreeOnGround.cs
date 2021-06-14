@@ -2,29 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreeOnGround : Resource, IHarvestable
+public class TreeOnGround : HarvestableResource
 {
     public Sprite TreeStump;    // ³ª¹« ¹ØµÕ
     public Sprite Origin;
-
-    private int HitLimit;
 
     private void Awake()
     {
         HitLimit = 4;
         MatchedTool = eEquipment.Axe;
-        H_Kinds = eHarResource.Tree;
+        Kinds = eHarResource.Tree;
     }
 
-    public void Hit(int damage, eEquipment equipment)
+    public override void Harvest(float damage, eEquipment tool)
     {
-        if (HitLimit > 0 && equipment == MatchedTool)
-        {
-            HitLimit -= damage;
-            Debug.Log("³ª¹« ¸ÂÀ½");
-            return;
-        }
+        base.Harvest(damage, tool);
 
-        GetComponent<SpriteRenderer>().sprite = TreeStump;
+        if (HitLimit <= 0)
+        {
+            GetComponent<SpriteRenderer>().sprite = TreeStump;
+            HitLimit = 0;
+        }
     }
 }
