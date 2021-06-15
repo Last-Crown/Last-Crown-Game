@@ -8,4 +8,9 @@ public class PlayerHealth : LivingEntity
     {
         Health = 100;
     }
+
+    public override void OnDamage(float damage)
+    {
+        base.OnDamage(damage);
+    }
 }

@@ -12,7 +12,7 @@ public class Hammer : Equipment
         OriginRot = new Vector3(0, 0, -90);
         OriginScale = new Vector3(0.6f, 0.7f, 1);
 
-        CoolTime = 2;
+        CoolTime = 1;
         AnimString = "useAxe";
     }
 

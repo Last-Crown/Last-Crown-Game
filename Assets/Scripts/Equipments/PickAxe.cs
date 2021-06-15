@@ -12,7 +12,7 @@ public class PickAxe : Equipment
         OriginRot = new Vector3(0, 0, -90);
         OriginScale = new Vector3(0.8f, 0.8f, 1);
 
-        CoolTime = 2;
+        CoolTime = 1;
         AnimString = "useAxe";
     }
 

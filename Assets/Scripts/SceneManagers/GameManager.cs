@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public GameManager Instance => instance ??= FindObjectOfType<GameManager>();    // instance가 null이면 대입
+    private static GameManager instance;
+
     public GameObject maincamera = null;
 
     public Text frameText = null;

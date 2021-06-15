@@ -12,7 +12,7 @@ public class Shovel : Equipment
         OriginRot = new Vector3(0, 0, 90);
         OriginScale = new Vector3(0.75f, 0.75f, 1);
 
-        CoolTime = 2;
+        CoolTime = 1;
         AnimString = "useShovel";
     }
 

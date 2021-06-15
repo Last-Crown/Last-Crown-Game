@@ -7,8 +7,6 @@ public class PlayerAction : MonoBehaviour
     public eEquipment WhatsInHand;
     public Equipment NearByTool;
 
-
-    public GameObject FrontObject;
     private Transform Hands;
     private Animator PlayerAnim;
     private PlayerHealth playerHealth;
@@ -55,6 +53,8 @@ public class PlayerAction : MonoBehaviour
             MyEquipmentsDict.Remove(WhatsInHand);
             ToolsList.Remove(WhatsInHand);
             WhatsInHand = eEquipment.None;
+
+            PlayerAnim.SetBool("isHold", false);
         }
 
         if (Input.GetKeyDown(KeyCode.E) && ToolsList.Count > 0)
@@ -75,9 +75,11 @@ public class PlayerAction : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (WhatsInHand != eEquipment.None)
+            Equipment e = MyEquipmentsDict[WhatsInHand];
+            
+            if (WhatsInHand != eEquipment.None && e.CanUse)
             {
-                MyEquipmentsDict[WhatsInHand].Use(PlayerAnim);
+                e.Use(PlayerAnim);
             }
         }
     }
@@ -85,10 +87,12 @@ public class PlayerAction : MonoBehaviour
     // 현재 도구에서 obj로 교체
     private void ChangeEquipment(Equipment obj)
     {
+        PlayerAnim.SetBool("isHold", true);
 
         MyEquipmentsDict[WhatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
 
         WhatsInHand = obj.Kinds;
+        
 
         if (!MyEquipmentsDict.ContainsKey(obj.Kinds)) // obj가 처음 집은 도구라면
         {
@@ -131,21 +135,5 @@ public class PlayerAction : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (FrontObject == null)
-        {
-            if (collision.CompareTag("Tree") || collision.CompareTag("Rock"))
-            {
-                FrontObject = collision.gameObject;
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        FrontObject = null;
     }
 }
