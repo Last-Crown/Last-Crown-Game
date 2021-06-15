@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     {
         while(true)
         {
-            frameText.text = serverScript.customEventStack.Count.ToString();
+            frameText.text = serverScript.customEventQueue.Count.ToString();
 
             yield return null;
         }

@@ -10,15 +10,17 @@ using SimpleJSON;
 public class ServerInitializer : MonoBehaviour
 {
     private const float version = 1.5f;
-    public static ServerInitializer instance = null;
+    private static ServerInitializer instance = null;
+
+    private Slider loadbar;
 
     public Socket socket;
 
     public string playerName = "";
 
     private JSONNode json = JSONNode.Parse("");
-    public Queue<KeyValuePair<string, JSONNode>> customEventStack = new Queue<KeyValuePair<string, JSONNode>>();
-    public List<GameObject> playerObjectList = new List<GameObject>();
+    public Queue<KeyValuePair<string, JSONNode>> customEventQueue = new Queue<KeyValuePair<string, JSONNode>>();
+    private List<GameObject> playerObjectList = new List<GameObject>();
 
     private bool joinedGame = false;
 
@@ -30,55 +32,57 @@ public class ServerInitializer : MonoBehaviour
             return;
         }
         instance = this;
+
         DontDestroyOnLoad(gameObject);
+        loadbar = GameObject.FindWithTag("LoadBar").GetComponent<Slider>();
 
         socket = IO.Socket("http://server.hyunwoo.kim:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
-            customEventStack.Enqueue(new KeyValuePair<string, JSONNode>("connected", null));
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("connected", null));
         });
 
         socket.On("get ver", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            customEventStack.Enqueue(new KeyValuePair<string, JSONNode>("get ver", parsedData));
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("get ver", parsedData));
         });
 
         socket.On(Socket.EVENT_DISCONNECT, () =>
         {
-            customEventStack.Enqueue(new KeyValuePair<string, JSONNode>("disconnected", null));
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("disconnected", null));
         });
 
         socket.On("set name", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            customEventStack.Enqueue(new KeyValuePair<string, JSONNode>("set name", parsedData));
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set name", parsedData));
         });
 
         socket.On("set seed", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            customEventStack.Enqueue(new KeyValuePair<string, JSONNode>("set seed", parsedData));
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set seed", parsedData));
         });
 
         socket.On("delete name", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            customEventStack.Enqueue(new KeyValuePair<string, JSONNode>("delete name", parsedData));
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("delete name", parsedData));
         });
 
         socket.On("update data", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            if (customEventStack.Count == 0)
+            if (customEventQueue.Count == 0)
             {
-                customEventStack.Enqueue(new KeyValuePair<string, JSONNode>("update data", parsedData));
+                customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("update data", parsedData));
             }
         });
     }
@@ -114,15 +118,17 @@ public class ServerInitializer : MonoBehaviour
             }
         }
 
-        if (customEventStack.Count > 0)
+        if (customEventQueue.Count > 0)
         {
-            KeyValuePair<string, JSONNode> currentEvent = customEventStack.Dequeue();
-            Debug.Log("EventStackCount: " + customEventStack.Count + " " + currentEvent.Key);
+            KeyValuePair<string, JSONNode> currentEvent = customEventQueue.Dequeue();
+            Debug.Log("EventStackCount: " + customEventQueue.Count + " " + currentEvent.Key);
 
             switch (currentEvent.Key)
             {
                 case "connected":
                     Debug.Log("Connected!");
+                    loadbar.value += 0.5f;
+                    loadbar.transform.Find("Text").GetComponent<Text>().text = "Collecting version..";
                     socket.Emit("get ver", version);
 
                     break;
@@ -135,6 +141,7 @@ public class ServerInitializer : MonoBehaviour
                     }
                     else if (currentEvent.Value["state"] == "OK")
                     {
+                        loadbar.value += 0.5f;
                         SceneManager.LoadScene("MainScene");
                     }
 
@@ -171,7 +178,7 @@ public class ServerInitializer : MonoBehaviour
                     MapGenerator mapGenerator = GameObject.Find("Managers").GetComponent<MapGenerator>();
 
                     mapGenerator.UpdateSeed(currentEvent.Value);
-                    mapGenerator.GenerateMap();
+                    StartCoroutine(mapGenerator.GenerateMap());
                     socket.Emit("get data");
 
                     break;

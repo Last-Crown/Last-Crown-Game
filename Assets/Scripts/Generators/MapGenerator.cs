@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class MapGenerator : MonoBehaviour
 {
+    public Slider loadBar;
+
     [Header("Dimensions")]
     public int seed = 0;
     public int width;
@@ -15,6 +17,11 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Height Map")]
     public float[,] heightMap;
+
+    public void Awake()
+    {
+        loadBar = GameObject.FindWithTag("LoadBar").GetComponent<Slider>();
+    }
 
     public void UpdateSeed(int _seed)
     {
@@ -33,7 +40,7 @@ public class MapGenerator : MonoBehaviour
         offset.y = Random.value * 100 * height;
     }
 
-    public void GenerateMap()
+    public IEnumerator GenerateMap()
     {
         heightMap = NoiseGenerator.Generate(width, height, scale, offset);
 
@@ -74,7 +81,13 @@ public class MapGenerator : MonoBehaviour
                     newResource.name = newResourceName + "[" + i + "," + j + "," + k + "]";
                     newResource.transform.position = newFloor.transform.position + new Vector3(gridScale * (0.5f - Random.value), gridScale * (0.5f - Random.value));
                 }
+
+                loadBar.value = (float)((i * width) + j) / (width * height);
+                yield return null;
             }
         }
+
+        loadBar.gameObject.SetActive(false);
+        yield return null;
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - Tool
   - Tree
   - Rock
+  - LoadBar
   layers:
   - Default
   - TransparentFX
