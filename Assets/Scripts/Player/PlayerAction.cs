@@ -20,7 +20,7 @@ public class PlayerAction : MonoBehaviour
 
     private float navRange;
     public bool canPickTool;
-    private int PickableLayer;
+    private int PickableLayer, ToolCountLimit;
 
 
     void Awake()
@@ -32,6 +32,7 @@ public class PlayerAction : MonoBehaviour
         Hands = transform.GetChild(0).GetChild(1).GetChild(0);
         PlayerAnim = GetComponent<Animator>();
         PickableLayer = 1 << LayerMask.NameToLayer("Pickable");
+        ToolCountLimit = 2;
     }
 
     private void Start()
@@ -42,46 +43,68 @@ public class PlayerAction : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && canPickTool && NearByTool != null)
+        if (Input.GetKeyDown(KeyCode.Space))   // Pick
+            PickEquipment();
+
+        if (Input.GetKeyDown(KeyCode.F))    // Drop
+            DropEquipment();
+
+        if (Input.GetKeyDown(KeyCode.E)) // Tool Cycle
+            CycleTools();
+
+        if (Input.GetKeyDown(KeyCode.Q))    // Tool Activate
+            ActivateEquipment();
+    }
+
+    public void ActivateEquipment()
+    {
+        if (WhatsInHand == eEquipment.None)
+            return;
+
+        Equipment e = MyEquipmentsDict[WhatsInHand];
+        e.Use(PlayerAnim);
+    }
+
+    public void CycleTools()
+    {
+        if (ToolsList.Count <= 0)
+            return;
+
+        eEquipment obj;
+        if (WhatsInHand != eEquipment.None)
         {
-            ChangeEquipment(NearByTool);
+            LinkedListNode<eEquipment> currentNode = ToolsList.Find(WhatsInHand);
+
+            // 다음 도구 enum 저장 (현재 노드가 마지막 노드이면 처음 걸로 바꿔줌)
+            obj = currentNode == ToolsList.Last ? ToolsList.First.Value : currentNode.Next.Value;
         }
+        else
+            obj = ToolsList.First.Value;
 
-        if (Input.GetKeyDown(KeyCode.F) && WhatsInHand != eEquipment.None)
-        {
-            MyEquipmentsDict[WhatsInHand].Drop();
-            MyEquipmentsDict.Remove(WhatsInHand);
-            ToolsList.Remove(WhatsInHand);
-            WhatsInHand = eEquipment.None;
+        ChangeEquipment(MyEquipmentsDict[obj]);
+    }
 
-            PlayerAnim.SetBool("isHold", false);
-        }
+    public void PickEquipment()
+    {
+        if (!canPickTool || NearByTool == null)
+            return;
 
-        if (Input.GetKeyDown(KeyCode.E) && ToolsList.Count > 0)
-        {
-            eEquipment obj;
-            if (WhatsInHand != eEquipment.None)
-            {
-                LinkedListNode<eEquipment> currentNode = ToolsList.Find(WhatsInHand);
+        if (ToolsList.Count >= ToolCountLimit)
+            DropEquipment();
+        ChangeEquipment(NearByTool);
+    }
 
-                // 다음 도구 enum 저장 (현재 노드가 마지막 노드이면 처음 걸로 바꿔줌)
-                obj = currentNode == ToolsList.Last ? ToolsList.First.Value : currentNode.Next.Value;
-            }
-            else
-                obj = ToolsList.First.Value;
-            
-            ChangeEquipment(MyEquipmentsDict[obj]);
-        }
+    private void DropEquipment()
+    {
+        if (WhatsInHand == eEquipment.None)
+            return;
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Equipment e = MyEquipmentsDict[WhatsInHand];
-            
-            if (WhatsInHand != eEquipment.None && e.CanUse)
-            {
-                e.Use(PlayerAnim);
-            }
-        }
+        MyEquipmentsDict[WhatsInHand].Drop();
+        MyEquipmentsDict.Remove(WhatsInHand);
+        ToolsList.Remove(WhatsInHand);
+        WhatsInHand = eEquipment.None;
+
+        PlayerAnim.SetBool("isHold", false);
     }
 
     // 현재 도구에서 obj로 교체
@@ -92,7 +115,6 @@ public class PlayerAction : MonoBehaviour
         MyEquipmentsDict[WhatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
 
         WhatsInHand = obj.Kinds;
-        
 
         if (!MyEquipmentsDict.ContainsKey(obj.Kinds)) // obj가 처음 집은 도구라면
         {

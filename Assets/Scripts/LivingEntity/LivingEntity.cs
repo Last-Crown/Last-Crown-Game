@@ -8,10 +8,19 @@ public class LivingEntity : MonoBehaviour
 
     protected float Health;
 
-
     public virtual void OnDamage(float damage)
     {
-        Health -= damage;
-        Health = IsAlive ? Health : 0;
+        if (IsAlive)
+            Health -= damage;
+        else
+        {
+            Health = 0;
+            OnDie();
+        }
+    }
+
+    public virtual void OnDie()
+    {
+
     }
 }

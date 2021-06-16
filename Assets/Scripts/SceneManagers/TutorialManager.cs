@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    public TutorialManager Instance => instance ??= FindObjectOfType<TutorialManager>();
+    public static TutorialManager Instance => instance ??= FindObjectOfType<TutorialManager>();
     private static TutorialManager instance;
 
     public GameObject maincamera;
@@ -23,9 +23,6 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
-        playerObject.AddComponent<PlayerMovement>();
-        playerObject.AddComponent<PlayerAction>();
-        playerObject.AddComponent<PlayerHealth>();
         playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
     }
