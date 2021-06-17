@@ -865,6 +865,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 1360297104644124217, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1360297104644124217, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1360297104644124217, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1360297104644124217, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1360297104644124217, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3887955394321280517, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -894,8 +914,12 @@ PrefabInstance:
       value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 6740808626053808530, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
-      propertyPath: m_LocalRotation.w
+      propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740808626053808530, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9914449
       objectReference: {fileID: 0}
     - target: {fileID: 6740808626053808530, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
       propertyPath: m_LocalRotation.x
@@ -907,11 +931,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6740808626053808530, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.13052624
       objectReference: {fileID: 0}
     - target: {fileID: 6740808626053808530, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 7209324528448923180, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
       propertyPath: m_Name

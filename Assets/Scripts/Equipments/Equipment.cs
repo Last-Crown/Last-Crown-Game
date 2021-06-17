@@ -32,7 +32,7 @@ public class Equipment : MonoBehaviour
         transform.localEulerAngles = originRot;
         transform.localScale = originScale;
 
-        GetComponent<SpriteRenderer>().sortingOrder = 2;
+        GetComponent<SpriteRenderer>().sortingOrder = 5;
         gameObject.layer = 0;
     }
 
