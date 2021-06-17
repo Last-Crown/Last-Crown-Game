@@ -12,6 +12,12 @@ public class PlayerHealth : LivingEntity
         health = 100;
     }
 
+    private void Update()
+    {
+
+
+    }
+
     public override void OnDamage(float damage)
     {
         base.OnDamage(damage);
