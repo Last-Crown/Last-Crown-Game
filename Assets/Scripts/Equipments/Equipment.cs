@@ -12,10 +12,10 @@ public class Equipment : MonoBehaviour
     protected Vector3 originPos, originRot, originScale;
 
     protected string animString;
-    public float coolTime, curTime = 0;
-
+    public float attackSpeed, curTime = 0;
     public bool CanUse => curTime <= 0;
 
+    protected PlayerStats stats;
 
     public virtual void Update()
     {
@@ -23,8 +23,10 @@ public class Equipment : MonoBehaviour
             curTime -= Time.deltaTime;
     }
 
-    public virtual void Equip(Transform hand)
+    public virtual void Equip(Transform root, Transform hand)
     {
+        stats = root.GetComponent<PlayerStats>();
+
         transform.SetParent(hand);
         transform.localPosition = originPos;
         transform.localEulerAngles = originRot;
@@ -46,7 +48,8 @@ public class Equipment : MonoBehaviour
     {
         if (!CanUse) return;
 
+        curTime = 1 / stats.AttackSpeed;    // 공격 속도 지정
+        anim.speed = stats.AttackSpeed;     // 애니메이션 속도 지정
         anim.SetTrigger(animString);
-        curTime = coolTime;
     }
 }

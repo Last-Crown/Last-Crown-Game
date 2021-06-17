@@ -394,8 +394,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: defb92b2d0c83674cb7e21fbdff362ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TreeStump: {fileID: 21300000, guid: 940b7b6b48223564d8d14c053bc55f86, type: 3}
-  Origin: {fileID: 21300000, guid: 719708869128d924e80bd7ddf8cb4130, type: 3}
+  treeStumpSprite: {fileID: 21300000, guid: 940b7b6b48223564d8d14c053bc55f86, type: 3}
+  originSprite: {fileID: 21300000, guid: 719708869128d924e80bd7ddf8cb4130, type: 3}
 --- !u!1 &339314614
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,9 +731,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94e058df4e9cbf54bbfc3f65e78c80c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Kinds: 0
-  CoolTime: 0
-  CurTime: 0
+  kinds: 0
+  attackSpeed: 0
+  curTime: 0
 --- !u!1 &658656890
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,6 +907,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+--- !u!1 &756684903 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7209324528448923180, guid: ea7ce943612974546a9f9b128411cfed, type: 3}
+  m_PrefabInstance: {fileID: 756684902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &756684904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756684903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4053d4ecfe7964429eda4bf3be1c82d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackSpeed: 2
 --- !u!1 &844963421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,9 +1392,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a05c15f8911a4449790dcca0665924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Kinds: 0
-  CoolTime: 0
-  CurTime: 0
+  kinds: 0
+  attackSpeed: 0
+  curTime: 0
 --- !u!70 &1854543218
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1440,9 +1458,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7c52fe91534ed4f8c21823921a1abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Kinds: 0
-  CoolTime: 0
-  CurTime: 0
+  kinds: 0
+  attackSpeed: 0
+  curTime: 0
 --- !u!212 &1963761524
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1555,9 +1573,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d916465ff9ca03408220720548583ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Kinds: 0
-  CoolTime: 0
-  CurTime: 0
+  kinds: 0
+  attackSpeed: 0
+  curTime: 0
 --- !u!212 &2088020323
 SpriteRenderer:
   m_ObjectHideFlags: 0

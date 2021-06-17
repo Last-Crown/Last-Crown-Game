@@ -12,6 +12,7 @@ public class PlayerAction : MonoBehaviour
 
     // Player
     private PlayerHealth playerHealth;
+    private PlayerStats playerStats;
 
     private LinkedList<eEquipment> toolsList = new LinkedList<eEquipment>();
     private Dictionary<eEquipment, Equipment> myEquipmentsDict = new Dictionary<eEquipment, Equipment>()
@@ -27,9 +28,9 @@ public class PlayerAction : MonoBehaviour
     void Awake()
     {
         navRange = 1.2f;
+        toolCountLimit = 2;
         canPickTool = false;
         pickableLayer = 1 << LayerMask.NameToLayer("Pickable");
-        toolCountLimit = 2;
         hands = transform.GetChild(0).GetChild(1).GetChild(0);
 
         playerAnim = GetComponent<Animator>();
@@ -118,7 +119,7 @@ public class PlayerAction : MonoBehaviour
 
         if (!myEquipmentsDict.ContainsKey(obj.kinds)) // obj가 처음 집은 도구라면
         {
-            obj.Equip(hands);
+            obj.Equip(transform, hands);
             myEquipmentsDict.Add(obj.kinds, obj);
             toolsList.AddLast(obj.kinds);
             return;

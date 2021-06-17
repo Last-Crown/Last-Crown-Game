@@ -12,17 +12,7 @@ public class Axe : Equipment
         originRot = new Vector3(0, 0, 90);
         originScale = new Vector3(0.75f, 0.75f, 1);
 
-        coolTime = 1;
+        attackSpeed = 1;
         animString = "useAxe";
-    }
-
-    public override void Equip(Transform hand)
-    {
-        base.Equip(hand);
-    }
-
-    public override void Drop()
-    {
-        base.Drop();
     }
 }

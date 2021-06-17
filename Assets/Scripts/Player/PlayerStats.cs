@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStat : MonoBehaviour
+public class PlayerStats : MonoBehaviour
 {
-    private float _attackSpeed;
+    public float attackSpeed;
+
     public float AttackSpeed {
-        get => _attackSpeed;
+        get => attackSpeed;
         set
         {
-            _attackSpeed = value;
+            attackSpeed = value;
             // AttackSpeed Update
         }
     }
