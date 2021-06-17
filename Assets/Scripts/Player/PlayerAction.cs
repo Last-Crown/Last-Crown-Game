@@ -11,8 +11,8 @@ public class PlayerAction : MonoBehaviour
     private PlayerHealth playerHealth;
 
     public eEquipment whatsInHand = eEquipment.None;
-    private LinkedList<eEquipment> toolsList = new LinkedList<eEquipment>();
-    private Dictionary<eEquipment, Equipment> myEquipmentsDict = new Dictionary<eEquipment, Equipment>()
+    public LinkedList<eEquipment> toolsList = new LinkedList<eEquipment>();
+    public Dictionary<eEquipment, Equipment> myEquipmentsDict = new Dictionary<eEquipment, Equipment>()
     {
         { eEquipment.None, null }
     };

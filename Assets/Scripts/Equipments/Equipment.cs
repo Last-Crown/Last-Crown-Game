@@ -12,7 +12,7 @@ public class Equipment : MonoBehaviour
     protected Vector3 originPos, originRot, originScale;
 
     protected string animString;
-    public float attackSpeed, curTime = 0;
+    public float damage, attackSpeed, curTime = 0;
     public bool CanUse => curTime <= 0;
 
     protected PlayerStats stats;

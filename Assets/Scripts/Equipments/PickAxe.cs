@@ -12,6 +12,7 @@ public class PickAxe : Equipment
         originRot = new Vector3(0, 0, -90);
         originScale = new Vector3(0.8f, 0.8f, 1);
 
+        damage = 1;
         attackSpeed = 1;
         animString = "useAxe";
     }
