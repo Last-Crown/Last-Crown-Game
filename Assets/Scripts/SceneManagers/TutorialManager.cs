@@ -23,12 +23,15 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
-        playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
+        playerObject.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
     }
 
     private void LateUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+            playerObject.GetComponent<PlayerHealth>().OnDamage(10);
+
         maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), Time.deltaTime * 4.5f);
     }
 }

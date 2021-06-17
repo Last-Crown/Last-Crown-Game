@@ -7,7 +7,7 @@ public class PlayerInfo : MonoBehaviour
     public float attackSpeed;
     public int woodCount, stoneCount;
 
-    private void Awake()
+    private void Start()
     {
         WoodCount = 0;
         StoneCount = 0;

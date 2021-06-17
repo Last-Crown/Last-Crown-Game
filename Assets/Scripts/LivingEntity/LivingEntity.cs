@@ -6,13 +6,12 @@ public class LivingEntity : MonoBehaviour
 {
     public bool IsAlive => health > 0;
 
-    protected float health;
+    protected float health, maxHealth;
 
     public virtual void OnDamage(float damage)
     {
-        if (IsAlive)
-            health -= damage;
-        else
+        health -= damage;
+        if (!IsAlive)
         {
             health = 0;
             OnDie();
@@ -21,6 +20,6 @@ public class LivingEntity : MonoBehaviour
 
     public virtual void OnDie()
     {
-
+        Debug.Log("Player Dead!");
     }
 }

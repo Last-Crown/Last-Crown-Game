@@ -5,27 +5,22 @@ using UnityEngine;
 
 public class PlayerHealth : LivingEntity
 {
-    public event Action OnDeath;
+    public event Action OnDeath;    // Invoke when player dead
 
-    private void Awake()
+    private void Start()
     {
-        health = 100;
-    }
-
-    private void Update()
-    {
-
-
+        maxHealth = health = 100;
     }
 
     public override void OnDamage(float damage)
     {
         base.OnDamage(damage);
+
+        UIManager.Instance.UpdateHealth(maxHealth, health);
     }
 
     public override void OnDie()
     {
         base.OnDie();
-        OnDeath();
     }
 }

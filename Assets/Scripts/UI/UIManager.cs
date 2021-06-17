@@ -10,23 +10,24 @@ public class UIManager : MonoBehaviour
 
     public Text woodTxt;
     public Text stoneTxt;
+    public Image healthIndicator;
 
     private GameObject player;
     private PlayerAction pa;
-    private HealthIndicator healthIndicator;
 
     private void Awake()
     {
         player = GameObject.FindWithTag("Player"); // TODO: Server에서 플레이어 이름 찾기
         pa = player.GetComponent<PlayerAction>();
-        // TODO: Healthindicator
+
+        healthIndicator = player.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
     }
 
     public void UpdateWoodCount(int count) => woodTxt.text = count.ToString();
 
     public void UpdateStoneCount(int count) => stoneTxt.text = count.ToString();
 
-    // public void UpdateHealth(float ratio) => 
+    public void UpdateHealth(float maxH, float curH) => healthIndicator.fillAmount = curH / maxH;
 
     public void ButtonActivate() => pa.ActivateEquipment();
 
