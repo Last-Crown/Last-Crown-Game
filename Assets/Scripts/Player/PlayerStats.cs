@@ -11,7 +11,7 @@ public class PlayerStats : MonoBehaviour
         set
         {
             attackSpeed = value;
-            // AttackSpeed Update
+            // AttackSpeed Updated
         }
     }
 }

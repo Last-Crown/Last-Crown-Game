@@ -9,8 +9,8 @@ public enum eColResource    // collectable resource
 
 public class CollectableResource : MonoBehaviour
 {
-    public eColResource Kinds { get; set; }
-    public eEquipment MatchedTool { get; set; }
+    protected eColResource Kinds { get; set; }
+    protected eEquipment MatchedTool { get; set; }
 
     public virtual void Collecte()
     {

@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class PlayerAction : MonoBehaviour
 {
-    public eEquipment whatsInHand = eEquipment.None;
     public Equipment nearByTool;
 
     private Transform hands;
     private Animator playerAnim;
-
-    // Player
     private PlayerHealth playerHealth;
-    private PlayerStats playerStats;
 
+    public eEquipment whatsInHand = eEquipment.None;
     private LinkedList<eEquipment> toolsList = new LinkedList<eEquipment>();
     private Dictionary<eEquipment, Equipment> myEquipmentsDict = new Dictionary<eEquipment, Equipment>()
     {
@@ -60,7 +57,10 @@ public class PlayerAction : MonoBehaviour
     public void ActivateEquipment()
     {
         if (whatsInHand == eEquipment.None)
+        {
+            playerAnim.SetTrigger("useHand");
             return;
+        }
 
         Equipment e = myEquipmentsDict[whatsInHand];
         e.Use(playerAnim);

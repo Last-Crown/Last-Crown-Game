@@ -11,12 +11,12 @@ public class HarvestableResource : MonoBehaviour
 {
     protected float hitLimit;
 
-    public eHarResource Kinds { get; set; }
-    public eEquipment MatchedTool { get; set; }
+    protected eHarResource Kinds { get; set; }
+    protected eEquipment MatchedTool { get; set; }
 
     public virtual void Harvest(float damage, eEquipment tool)
     {
-        if (tool == MatchedTool && hitLimit > 0)
+        if (hitLimit > 0 && (tool == MatchedTool || tool == eEquipment.None))
         {
             hitLimit -= damage;
             Debug.Log(Kinds.ToString() + " Hit : " + hitLimit);
