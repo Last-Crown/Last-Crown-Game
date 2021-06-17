@@ -6,13 +6,17 @@ public class PlayerAnimEvent : MonoBehaviour
 {
     private GameObject FrontObject;
 
-    public void HitByAxe()
+    public void HitByHand()
     {
-        FrontObject?.GetComponent<HarvestableResource>().Harvest(1, eEquipment.Axe);
+        FrontObject?.GetComponent<HarvestableResource>().Harvest(0.3f, eEquipment.None);
     }
-    public void HitByPickAxe()
+    public void HitByAxe(eEquipment tool)
     {
-        FrontObject?.GetComponent<HarvestableResource>().Harvest(1, eEquipment.PickAxe);
+        FrontObject?.GetComponent<HarvestableResource>().Harvest(1, tool);
+    }
+    public void HitByPickAxe(eEquipment tool)
+    {
+        FrontObject?.GetComponent<HarvestableResource>().Harvest(1, tool);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

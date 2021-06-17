@@ -9,7 +9,7 @@ public class PlayerHealth : LivingEntity
 
     private void Awake()
     {
-        Health = 100;
+        health = 100;
     }
 
     public override void OnDamage(float damage)

@@ -9,17 +9,17 @@ public enum eHarResource    // harvestable resource
 
 public class HarvestableResource : MonoBehaviour
 {
-    protected float HitLimit;
+    protected float hitLimit;
 
-    public eHarResource Kinds { get; set; }
-    public eEquipment MatchedTool { get; set; }
+    protected eHarResource Kinds { get; set; }
+    protected eEquipment MatchedTool { get; set; }
 
     public virtual void Harvest(float damage, eEquipment tool)
     {
-        if (tool == MatchedTool && HitLimit > 0)
+        if (hitLimit > 0 && (tool == MatchedTool || tool == eEquipment.None))
         {
-            HitLimit -= damage;
-            Debug.Log(Kinds.ToString() + " Hit : " + HitLimit);
+            hitLimit -= damage;
+            Debug.Log(Kinds.ToString() + " Hit : " + hitLimit);
         }
     }
 }

@@ -4,40 +4,38 @@ using UnityEngine;
 
 public class PlayerAction : MonoBehaviour
 {
-    public eEquipment WhatsInHand;
-    public Equipment NearByTool;
+    public Equipment nearByTool;
 
-    private Transform Hands;
-    private Animator PlayerAnim;
+    private Transform hands;
+    private Animator playerAnim;
     private PlayerHealth playerHealth;
 
-    private LinkedList<eEquipment> ToolsList = new LinkedList<eEquipment>();
-    private Dictionary<eEquipment, Equipment> MyEquipmentsDict = new Dictionary<eEquipment, Equipment>()
+    public eEquipment whatsInHand = eEquipment.None;
+    private LinkedList<eEquipment> toolsList = new LinkedList<eEquipment>();
+    private Dictionary<eEquipment, Equipment> myEquipmentsDict = new Dictionary<eEquipment, Equipment>()
     {
         { eEquipment.None, null }
     };
 
-
     private float navRange;
     public bool canPickTool;
-    private int PickableLayer, ToolCountLimit;
+    private int pickableLayer, toolCountLimit;
 
 
     void Awake()
     {
-        WhatsInHand = eEquipment.None;
-
         navRange = 1.2f;
+        toolCountLimit = 2;
         canPickTool = false;
-        Hands = transform.GetChild(0).GetChild(1).GetChild(0);
-        PlayerAnim = GetComponent<Animator>();
-        PickableLayer = 1 << LayerMask.NameToLayer("Pickable");
-        ToolCountLimit = 2;
+        pickableLayer = 1 << LayerMask.NameToLayer("Pickable");
+        hands = transform.GetChild(0).GetChild(1).GetChild(0);
+
+        playerAnim = GetComponent<Animator>();
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     private void Start()
     {
-        playerHealth = GetComponent<PlayerHealth>();
         StartCoroutine(NavigateAraund());
     }
 
@@ -58,73 +56,76 @@ public class PlayerAction : MonoBehaviour
 
     public void ActivateEquipment()
     {
-        if (WhatsInHand == eEquipment.None)
+        if (whatsInHand == eEquipment.None)
+        {
+            playerAnim.SetTrigger("useHand");
             return;
+        }
 
-        Equipment e = MyEquipmentsDict[WhatsInHand];
-        e.Use(PlayerAnim);
+        Equipment e = myEquipmentsDict[whatsInHand];
+        e.Use(playerAnim);
     }
 
     public void CycleTools()
     {
-        if (ToolsList.Count <= 0)
+        if (toolsList.Count <= 0)
             return;
 
         eEquipment obj;
-        if (WhatsInHand != eEquipment.None)
+        if (whatsInHand != eEquipment.None)
         {
-            LinkedListNode<eEquipment> currentNode = ToolsList.Find(WhatsInHand);
+            LinkedListNode<eEquipment> currentNode = toolsList.Find(whatsInHand);
 
             // 다음 도구 enum 저장 (현재 노드가 마지막 노드이면 처음 걸로 바꿔줌)
-            obj = currentNode == ToolsList.Last ? ToolsList.First.Value : currentNode.Next.Value;
+            obj = currentNode == toolsList.Last ? toolsList.First.Value : currentNode.Next.Value;
         }
         else
-            obj = ToolsList.First.Value;
+            obj = toolsList.First.Value;
 
-        ChangeEquipment(MyEquipmentsDict[obj]);
+        ChangeEquipment(myEquipmentsDict[obj]);
     }
 
     public void PickEquipment()
     {
-        if (!canPickTool || NearByTool == null)
+        if (!canPickTool || nearByTool == null)
             return;
 
-        if (ToolsList.Count >= ToolCountLimit)
+        if (toolsList.Count >= toolCountLimit)
             DropEquipment();
-        ChangeEquipment(NearByTool);
+        ChangeEquipment(nearByTool);
     }
 
     private void DropEquipment()
     {
-        if (WhatsInHand == eEquipment.None)
+        if (whatsInHand == eEquipment.None)
             return;
 
-        MyEquipmentsDict[WhatsInHand].Drop();
-        MyEquipmentsDict.Remove(WhatsInHand);
-        ToolsList.Remove(WhatsInHand);
-        WhatsInHand = eEquipment.None;
+        myEquipmentsDict[whatsInHand].Drop();
+        myEquipmentsDict.Remove(whatsInHand);
+        toolsList.Remove(whatsInHand);
+        whatsInHand = eEquipment.None;
 
-        PlayerAnim.SetBool("isHold", false);
+        playerAnim.SetBool("isHold", false);
     }
 
     // 현재 도구에서 obj로 교체
     private void ChangeEquipment(Equipment obj)
     {
-        PlayerAnim.SetBool("isHold", true);
+        playerAnim.SetBool("isHold", true);
 
-        MyEquipmentsDict[WhatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
+        myEquipmentsDict[whatsInHand]?.gameObject.SetActive(false);  // 현재 도구 비활성화
 
-        WhatsInHand = obj.Kinds;
+        whatsInHand = obj.kinds;
 
-        if (!MyEquipmentsDict.ContainsKey(obj.Kinds)) // obj가 처음 집은 도구라면
+        if (!myEquipmentsDict.ContainsKey(obj.kinds)) // obj가 처음 집은 도구라면
         {
-            obj.Equip(Hands);
-            MyEquipmentsDict.Add(obj.Kinds, obj);
-            ToolsList.AddLast(obj.Kinds);
+            obj.Equip(transform, hands);
+            myEquipmentsDict.Add(obj.kinds, obj);
+            toolsList.AddLast(obj.kinds);
             return;
         }
 
-        MyEquipmentsDict[obj.Kinds].gameObject.SetActive(true);   // obj 활성화
+        myEquipmentsDict[obj.kinds].gameObject.SetActive(true);   // obj 활성화
     }
 
     IEnumerator NavigateAraund()
@@ -134,7 +135,7 @@ public class PlayerAction : MonoBehaviour
             float dis = 100, temp;
 
             // PickableMask만 탐색
-            Collider2D[] collider2Ds = Physics2D.OverlapCircleAll(transform.position, navRange, PickableLayer);
+            Collider2D[] collider2Ds = Physics2D.OverlapCircleAll(transform.position, navRange, pickableLayer);
             foreach (var col in collider2Ds)
             {
                 // 더 가까운 것 찾음
@@ -142,14 +143,14 @@ public class PlayerAction : MonoBehaviour
                 if (dis >= temp)
                 {
                     dis = temp;
-                    NearByTool = col.GetComponent<Equipment>();
+                    nearByTool = col.GetComponent<Equipment>();
                 }
             }
 
             if (collider2Ds.Length <= 0)
             {
                 canPickTool = false;
-                NearByTool = null;
+                nearByTool = null;
             }
             else
                 canPickTool = true;

@@ -6,23 +6,13 @@ public class PickAxe : Equipment
 {
     private void Awake()
     {
-        Kinds = eEquipment.PickAxe;
+        kinds = eEquipment.PickAxe;
 
-        OriginPos = new Vector3(0.2f, 0.6f, 0);
-        OriginRot = new Vector3(0, 0, -90);
-        OriginScale = new Vector3(0.8f, 0.8f, 1);
+        originPos = new Vector3(0.2f, 0.6f, 0);
+        originRot = new Vector3(0, 0, -90);
+        originScale = new Vector3(0.8f, 0.8f, 1);
 
-        CoolTime = 1;
-        AnimString = "useAxe";
-    }
-
-    public override void Equip(Transform hand)
-    {
-        base.Equip(hand);
-    }
-
-    public override void Drop()
-    {
-        base.Drop();
+        attackSpeed = 1;
+        animString = "useAxe";
     }
 }

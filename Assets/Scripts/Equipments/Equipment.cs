@@ -8,30 +8,31 @@ public enum eEquipment
 
 public class Equipment : MonoBehaviour
 {
-    public eEquipment Kinds;    // 도구 종류
-    protected Vector3 OriginPos, OriginRot, OriginScale;
+    public eEquipment kinds;    // 도구 종류
+    protected Vector3 originPos, originRot, originScale;
 
-    protected string AnimString;
-    public float CoolTime, CurTime = 0;
+    protected string animString;
+    public float attackSpeed, curTime = 0;
+    public bool CanUse => curTime <= 0;
 
-
-    public bool CanUse => CurTime <= 0;
-
+    protected PlayerStats stats;
 
     public virtual void Update()
     {
         if (!CanUse)
-            CurTime -= Time.deltaTime;
+            curTime -= Time.deltaTime;
     }
 
-    public virtual void Equip(Transform hand)
+    public virtual void Equip(Transform root, Transform hand)
     {
-        transform.SetParent(hand);
-        transform.localPosition = OriginPos;
-        transform.localEulerAngles = OriginRot;
-        transform.localScale = OriginScale;
+        stats = root.GetComponent<PlayerStats>();
 
-        GetComponent<SpriteRenderer>().sortingOrder = 2;
+        transform.SetParent(hand);
+        transform.localPosition = originPos;
+        transform.localEulerAngles = originRot;
+        transform.localScale = originScale;
+
+        GetComponent<SpriteRenderer>().sortingOrder = 5;
         gameObject.layer = 0;
     }
 
@@ -47,7 +48,8 @@ public class Equipment : MonoBehaviour
     {
         if (!CanUse) return;
 
-        anim.SetTrigger(AnimString);
-        CurTime = CoolTime;
+        curTime = 1 / stats.AttackSpeed;    // 공격 속도 지정
+        anim.speed = stats.AttackSpeed;     // 애니메이션 속도 지정
+        anim.SetTrigger(animString);
     }
 }
