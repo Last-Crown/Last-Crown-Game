@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using SimpleJSON;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,10 +27,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        JSONNode json = serverScript.json["data"];
+
         playerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
         playerObject.AddComponent<PlayerMovement>();
         playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
+        playerObject.transform.position = new Vector3(json["pos"]["x"], json["pos"]["y"], 0);
 
         StartCoroutine(UpdateFrameText());
     }
