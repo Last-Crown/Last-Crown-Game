@@ -6,14 +6,14 @@ public class Axe : Equipment
 {
     private void Awake()
     {
-        Kinds = eEquipment.Axe;
+        kinds = eEquipment.Axe;
 
-        OriginPos = new Vector3(0.2f, 0.8f, 0);
-        OriginRot = new Vector3(0, 0, 90);
-        OriginScale = new Vector3(0.75f, 0.75f, 1);
+        originPos = new Vector3(0.2f, 0.8f, 0);
+        originRot = new Vector3(0, 0, 90);
+        originScale = new Vector3(0.75f, 0.75f, 1);
 
-        CoolTime = 1;
-        AnimString = "useAxe";
+        coolTime = 1;
+        animString = "useAxe";
     }
 
     public override void Equip(Transform hand)

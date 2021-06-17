@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class LivingEntity : MonoBehaviour
 {
-    public bool IsAlive => Health > 0;
+    public bool IsAlive => health > 0;
 
-    protected float Health;
+    protected float health;
 
     public virtual void OnDamage(float damage)
     {
         if (IsAlive)
-            Health -= damage;
+            health -= damage;
         else
         {
-            Health = 0;
+            health = 0;
             OnDie();
         }
     }

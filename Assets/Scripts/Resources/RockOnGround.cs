@@ -6,7 +6,7 @@ public class RockOnGround : HarvestableResource
 {
     private void Awake()
     {
-        HitLimit = 4;
+        hitLimit = 4;
         MatchedTool = eEquipment.PickAxe;
         Kinds = eHarResource.Rock;
     }

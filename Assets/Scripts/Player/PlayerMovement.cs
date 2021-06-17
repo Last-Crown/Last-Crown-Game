@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private JoyStick joyStick;
     private Socket socket;
-    private Animator PlayerAnim;
+    private Animator playerAnim;
 
     private float speed;
     private bool serverExists;
@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
         serverExists = true;
 
         joyStick = GameObject.Find("JoyStick").GetComponent<JoyStick>();
-        PlayerAnim = GetComponent<Animator>();
+        playerAnim = GetComponent<Animator>();
     }
 
 
@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.anyKey) KeyboardMove();
         if (joyStick.Dir != Vector2.zero) JoystickMove();
         
-        if (!Input.anyKey && joyStick.Dir == Vector2.zero) PlayerAnim.SetBool("Walk", false);
+        if (!Input.anyKey && joyStick.Dir == Vector2.zero) playerAnim.SetBool("Walk", false);
     }
 
     private void KeyboardMove()
@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.Translate(speed * Time.deltaTime * new Vector2(dx, dy));
             transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dy, dx) * 180 / Mathf.PI - 90);
-            PlayerAnim.SetBool("Walk", true);
+            playerAnim.SetBool("Walk", true);
         }
             
 
@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
         transform.GetChild(0).rotation = Quaternion.Euler(0, 0, Mathf.Atan2(joyStick.Dir.y, joyStick.Dir.x) * 180 / Mathf.PI - 90);
 
-        PlayerAnim.SetBool("Walk", true);
+        playerAnim.SetBool("Walk", true);
 
         if (serverExists)
         {

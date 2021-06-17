@@ -8,28 +8,27 @@ public enum eEquipment
 
 public class Equipment : MonoBehaviour
 {
-    public eEquipment Kinds;    // 도구 종류
-    protected Vector3 OriginPos, OriginRot, OriginScale;
+    public eEquipment kinds;    // 도구 종류
+    protected Vector3 originPos, originRot, originScale;
 
-    protected string AnimString;
-    public float CoolTime, CurTime = 0;
+    protected string animString;
+    public float coolTime, curTime = 0;
 
-
-    public bool CanUse => CurTime <= 0;
+    public bool CanUse => curTime <= 0;
 
 
     public virtual void Update()
     {
         if (!CanUse)
-            CurTime -= Time.deltaTime;
+            curTime -= Time.deltaTime;
     }
 
     public virtual void Equip(Transform hand)
     {
         transform.SetParent(hand);
-        transform.localPosition = OriginPos;
-        transform.localEulerAngles = OriginRot;
-        transform.localScale = OriginScale;
+        transform.localPosition = originPos;
+        transform.localEulerAngles = originRot;
+        transform.localScale = originScale;
 
         GetComponent<SpriteRenderer>().sortingOrder = 2;
         gameObject.layer = 0;
@@ -47,7 +46,7 @@ public class Equipment : MonoBehaviour
     {
         if (!CanUse) return;
 
-        anim.SetTrigger(AnimString);
-        CurTime = CoolTime;
+        anim.SetTrigger(animString);
+        curTime = coolTime;
     }
 }

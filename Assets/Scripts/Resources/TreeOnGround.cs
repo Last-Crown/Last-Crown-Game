@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class TreeOnGround : HarvestableResource
 {
-    public Sprite TreeStump;    // 唱公 关嫡
-    public Sprite Origin;
+    public Sprite treeStumpSprite;    // 唱公 关嫡
+    public Sprite originSprite;
 
     private void Awake()
     {
-        HitLimit = 4;
+        hitLimit = 4;
         MatchedTool = eEquipment.Axe;
         Kinds = eHarResource.Tree;
     }
@@ -18,10 +18,10 @@ public class TreeOnGround : HarvestableResource
     {
         base.Harvest(damage, tool);
 
-        if (HitLimit <= 0)
+        if (hitLimit <= 0)
         {
-            GetComponent<SpriteRenderer>().sprite = TreeStump;
-            HitLimit = 0;
+            GetComponent<SpriteRenderer>().sprite = treeStumpSprite;
+            hitLimit = 0;
         }
     }
 }
