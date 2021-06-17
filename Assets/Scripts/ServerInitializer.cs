@@ -36,7 +36,7 @@ public class ServerInitializer : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         loadbar = GameObject.FindWithTag("LoadBar").GetComponent<Slider>();
 
-        socket = IO.Socket("http://server.hyunwoo.kim:15555");
+        socket = IO.Socket("http://localhost:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {

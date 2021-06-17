@@ -83,8 +83,8 @@ public class MapGenerator : MonoBehaviour
                 }
 
                 loadBar.value = (float)((i * width) + j) / (width * height);
-                yield return null;
             }
+            yield return null;
         }
 
         loadBar.gameObject.SetActive(false);

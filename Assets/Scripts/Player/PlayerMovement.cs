@@ -81,11 +81,11 @@ public class PlayerMovement : MonoBehaviour
     {
         string data = JsonUtility.ToJson((Vector2)transform.position);
 
-        socket.Emit("update pos", data);
+        socket.Emit("set pos", data);
     }
 
     private void ServerUpdateRot()
     {
-        socket.Emit("update rot", transform.GetChild(0).localEulerAngles.z);
+        socket.Emit("set rot", transform.GetChild(0).localEulerAngles.z);
     }
 }
