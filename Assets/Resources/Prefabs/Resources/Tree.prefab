@@ -97,7 +97,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.07840192, y: 0.2}
+  m_Offset: {x: 0.07840192, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -124,4 +124,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitLimit: 0
   treeStumpSprite: {fileID: 21300000, guid: 940b7b6b48223564d8d14c053bc55f86, type: 3}
-  originSprite: {fileID: 0}

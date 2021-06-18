@@ -109,7 +109,7 @@ public class PlayerAction : MonoBehaviour
     }
 
     // 현재 도구에서 obj로 교체
-    private void ChangeEquipment(Equipment obj)
+    public void ChangeEquipment(Equipment obj)
     {
         playerAnim.SetBool("isHold", true);
 

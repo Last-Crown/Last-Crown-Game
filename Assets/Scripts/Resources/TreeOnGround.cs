@@ -16,7 +16,7 @@ public class TreeOnGround : HarvestableResource
     public override void UpdateHitLimit(float _hitLimit)
     {
         hitLimit = _hitLimit;
-        if (hitLimit < 0)
+        if (hitLimit <= 0)
         {
             hitLimit = 0;
             GetComponent<SpriteRenderer>().sprite = treeStumpSprite;
