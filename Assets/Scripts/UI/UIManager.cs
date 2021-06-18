@@ -5,11 +5,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance => instance ??= FindObjectOfType<UIManager>();
-    private static UIManager instance;
-
     public Text woodTxt;
     public Text stoneTxt;
+    public Text tutorialTxt;
 
     private GameObject player;
     private PlayerAction pa;
@@ -70,5 +68,10 @@ public class UIManager : MonoBehaviour
             }
         }
         isPanelMove = false;
+    }
+
+    public void UpdateTutorialText(string txt)
+    {
+        tutorialTxt.text = txt;
     }
 }

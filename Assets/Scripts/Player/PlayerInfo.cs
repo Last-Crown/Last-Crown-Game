@@ -25,7 +25,7 @@ public class PlayerInfo : MonoBehaviour
         set
         {
             woodCount = value;
-            UIManager.Instance.UpdateWoodCount(value);
+            GameObject.Find("Managers").GetComponent<UIManager>().UpdateWoodCount(value);
         }
     }
 
@@ -35,7 +35,7 @@ public class PlayerInfo : MonoBehaviour
         set
         {
             stoneCount = value;
-            UIManager.Instance.UpdateStoneCount(value);
+            GameObject.Find("Managers").GetComponent<UIManager>().UpdateStoneCount(value);
         }
     }
 
