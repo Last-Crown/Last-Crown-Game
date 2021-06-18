@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        JSONNode json = serverScript.json["data"];
+        JSONNode json = serverScript.playerData["data"];
 
         playerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
         playerObject.AddComponent<PlayerMovement>();

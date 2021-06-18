@@ -14,14 +14,5 @@ public class TreeOnGround : HarvestableResource
         Kinds = eHarResource.Tree;
     }
 
-    public override void Harvest(float damage, eEquipment tool)
-    {
-        base.Harvest(damage, tool);
-
-        if (hitLimit <= 0)
-        {
-            GetComponent<SpriteRenderer>().sprite = treeStumpSprite;
-            hitLimit = 0;
-        }
-    }
+    
 }

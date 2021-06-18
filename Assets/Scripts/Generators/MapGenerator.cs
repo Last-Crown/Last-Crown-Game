@@ -72,13 +72,13 @@ public class MapGenerator : MonoBehaviour
                 }
 
                 newFloor = Instantiate(newFloor);
-                newFloor.name = newFloorName + "[" + i + "," + j + "]";
+                newFloor.name = newFloorName + "(" + i + "-" + j + ")";
                 newFloor.transform.position = new Vector2(gridScale * (i - width / 2), gridScale * (j - height / 2));
 
                 for (int k = 0; k < resourceCount; k++)
                 {
                     newResource = Instantiate(newResource);
-                    newResource.name = newResourceName + "[" + i + "," + j + "," + k + "]";
+                    newResource.name = newResourceName + "(" + i + "-" + j + "-" + k + ")";
                     newResource.transform.position = newFloor.transform.position + new Vector3(gridScale * (0.5f - Random.value), gridScale * (0.5f - Random.value));
                 }
 

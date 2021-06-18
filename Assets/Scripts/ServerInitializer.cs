@@ -10,7 +10,7 @@ using SimpleJSON;
 
 public class ServerInitializer : MonoBehaviour
 {
-    private const float version = 1.5f;
+    private const float version = 1.6f;
     private static ServerInitializer instance = null;
 
     private Slider loadbar;
@@ -20,7 +20,8 @@ public class ServerInitializer : MonoBehaviour
     public string playerName = "";
     public GameObject playerObject;
 
-    public JSONNode json = JSONNode.Parse("");
+    public JSONNode playerData = JSONNode.Parse("");
+    public JSONNode worldData = JSONNode.Parse("");
     public Queue<KeyValuePair<string, JSONNode>> customEventQueue = new Queue<KeyValuePair<string, JSONNode>>();
     public List<GameObject> playerObjectList = new List<GameObject>();
 
@@ -37,7 +38,7 @@ public class ServerInitializer : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        socket = IO.Socket("http://localhost:15555");
+        socket = IO.Socket("http://server.hyunwoo.kim:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
@@ -77,11 +78,19 @@ public class ServerInitializer : MonoBehaviour
             customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("delete name", parsedData));
         });
 
-        socket.On("set data", (data) =>
+        socket.On("set playerData", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set data", parsedData));
+            Debug.Log(parsedData);
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set playerData", parsedData));
+        });
+
+        socket.On("set worldData", (data) =>
+        {
+            JSONNode parsedData = JSON.Parse(data.ToString());
+
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set worldData", parsedData));
         });
     }
 
@@ -89,7 +98,7 @@ public class ServerInitializer : MonoBehaviour
     {
         if (joinedGame)
         {
-            foreach (var value in json.Values)
+            foreach (var value in playerData.Values)
             {
                 if (value["name"] != playerName)
                 {
@@ -115,9 +124,22 @@ public class ServerInitializer : MonoBehaviour
                 }
             }
 
+            foreach(var value in worldData)
+            {
+                GameObject currentObject = GameObject.Find(value.Key);
+
+                if(currentObject)
+                {
+                    HarvestableResource harvestableResource = currentObject.GetComponent<HarvestableResource>();
+
+                    harvestableResource.UpdateHitLimit(value.Value["health"]);
+                }
+            }
+
             if (customEventQueue.Count == 0)
             {
-                socket.Emit("get data");
+                socket.Emit("get playerData");
+                socket.Emit("get worldData");
             }
         }
 
@@ -153,7 +175,7 @@ public class ServerInitializer : MonoBehaviour
                 case "disconnected":
                     Debug.Log("Disconnect");
                     SceneManager.LoadScene("ConnectScene");
-                    foreach (var value in json.Values)
+                    foreach (var value in playerData.Values)
                     {
                         Destroy(GameObject.Find(value["name"]));
                     }
@@ -172,7 +194,7 @@ public class ServerInitializer : MonoBehaviour
                     else if (currentEvent.Value["state"] == "OK")
                     {
                         SceneManager.LoadScene("GameScene");
-                        json = currentEvent.Value;
+                        playerData = currentEvent.Value;
 
                         socket.Emit("get seed");
                     }
@@ -183,9 +205,10 @@ public class ServerInitializer : MonoBehaviour
 
                     mapGenerator.UpdateSeed(currentEvent.Value);
                     StartCoroutine(mapGenerator.GenerateMap());
-                    json = "";
+                    playerData = "";
                     joinedGame = true;
-                    socket.Emit("get data");
+                    socket.Emit("get playerData");
+                    socket.Emit("get worldData");
 
                     break;
                 case "delete name":
@@ -194,18 +217,22 @@ public class ServerInitializer : MonoBehaviour
                     playerObjectList.Remove(currentPlayerObject);
                     Destroy(currentPlayerObject);
 
-                    foreach (var value in json)
+                    foreach (var value in playerData)
                     {
                         if (value.Value["name"] == currentEvent.Value["name"])
                         {
-                            json.Remove(value);
+                            playerData.Remove(value);
                             break;
                         }
                     }
 
                     break;
-                case "set data":
-                    json = currentEvent.Value;
+                case "set playerData":
+                    playerData = currentEvent.Value;
+
+                    break;
+                case "set worldData":
+                    worldData = currentEvent.Value;
 
                     break;
             }
@@ -227,5 +254,10 @@ public class ServerInitializer : MonoBehaviour
         socket.Emit("set name", name);
 
         playerName = name;
+    }
+
+    public void EmitUpdateHealth(string data)
+    {
+        socket.Emit("update health", data);
     }
 }
