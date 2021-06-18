@@ -26,4 +26,10 @@ public class MainSceneManager : MonoBehaviour
 
         GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().EmitName(name);
     }
+
+    public void OnClickTutorial()
+    {
+        var loader = GameObject.Find("LevelLoader").GetComponentInChildren<LevelLoader>();
+        loader.LoadScene("TutorialScene");
+    }
 }
