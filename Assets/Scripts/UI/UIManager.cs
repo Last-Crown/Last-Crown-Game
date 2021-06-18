@@ -10,7 +10,6 @@ public class UIManager : MonoBehaviour
 
     public Text woodTxt;
     public Text stoneTxt;
-    public Image healthIndicator;
 
     private GameObject player;
     private PlayerAction pa;
@@ -18,21 +17,21 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindWithTag("Player"); // TODO: Server에서 플레이어 이름 찾기
-        pa = player.GetComponent<PlayerAction>();
+        pa = player?.GetComponent<PlayerAction>();
+    }
 
-        healthIndicator = player.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+    private void Start()
+    {
+        if (!player)
+        {
+            player = GameObject.Find("Managers").GetComponent<GameManager>().playerObject; // TODO: Server에서 플레이어 이름 찾기
+            pa = player.GetComponent<PlayerAction>();
+        }
     }
 
     public void UpdateWoodCount(int count) => woodTxt.text = count.ToString();
 
     public void UpdateStoneCount(int count) => stoneTxt.text = count.ToString();
-
-    public void UpdateHealth(float maxH, float curH)
-    {
-        float ratio = curH / maxH;
-        healthIndicator.fillAmount = ratio;
-        healthIndicator.color = new Color(1, ratio, ratio);
-    }
 
     public void ButtonActivate() => pa.ActivateEquipment();
 
@@ -61,7 +60,8 @@ public class UIManager : MonoBehaviour
                 panel.anchoredPosition = Vector2.Lerp(panel.anchoredPosition, target, Time.deltaTime * 10);
                 yield return null;
             }
-        } else
+        }
+        else
         {
             while (isPanelMove && panel.anchoredPosition.x > target.x + 1)
             {

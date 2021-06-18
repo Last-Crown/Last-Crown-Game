@@ -21,7 +21,24 @@ public class PlayerAnimEvent : MonoBehaviour
             damage = equipment.damage;
         }
 
-        if (GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().playerName == gameObject.name)
+        if (GameObject.FindWithTag("Server"))
+        {
+            if (GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().playerName == gameObject.name)
+            {
+                if (frontObject)
+                {
+                    if (frontObject.CompareTag("Player"))
+                    {
+                        frontObject.GetComponent<PlayerHealth>().OnDamage(damage);
+                    }
+                    else
+                    {
+                        frontObject.GetComponent<HarvestableResource>().Harvest(damage, tool);
+                    }
+                }
+            }
+        }
+        else
         {
             if (frontObject)
             {
@@ -33,7 +50,7 @@ public class PlayerAnimEvent : MonoBehaviour
                 {
                     frontObject.GetComponent<HarvestableResource>().Harvest(damage, tool);
                 }
-            }   
+            }
         }
     }
 
