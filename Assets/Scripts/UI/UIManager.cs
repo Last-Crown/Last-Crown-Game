@@ -8,14 +8,20 @@ public class UIManager : MonoBehaviour
     public Text woodTxt;
     public Text stoneTxt;
     public Text tutorialTxt;
+    public RectTransform stoneCreatePanel;
+    public RectTransform woodCreatePanel;
 
     private GameObject player;
+    private string playerName;
     private PlayerAction pa;
+    private PlayerInfo pi;
 
     private void Awake()
     {
-        player = GameObject.FindWithTag("Player"); // TODO: Server에서 플레이어 이름 찾기
+        playerName = GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().playerName;
+        player = GameObject.Find(playerName);
         pa = player?.GetComponent<PlayerAction>();
+        pi = player?.GetComponent<PlayerInfo>();
     }
 
     private void Start()
@@ -24,6 +30,7 @@ public class UIManager : MonoBehaviour
         {
             player = GameObject.Find("Managers").GetComponent<GameManager>().playerObject; // TODO: Server에서 플레이어 이름 찾기
             pa = player.GetComponent<PlayerAction>();
+            pi = player.GetComponent<PlayerInfo>();
         }
     }
 
@@ -33,19 +40,32 @@ public class UIManager : MonoBehaviour
 
     public void ButtonActivate() => pa.ActivateEquipment();
 
-    public void ButtonPickOrCycle() => pa.PickEquipment();  // TODO: Pick Or Cycle
+    public void ButtonPickOrCycle() => pa.Pick_or_CycleEquipment();
 
+    // Panel Button Click
+    public void ButtonWoodAxe()
+    {
+        if (pi.WoodCount < 2)
+            return;
+        pi.WoodCount -= 2;
+        Debug.Log(pi.WoodCount);
+        var woodAxe = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/WoodAxe"));
+        var e = woodAxe.GetComponent<Equipment>();
+        pa.ChangeEquipment(e);
+        MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
+    }
 
     /////
     private bool isPanelMove;
+    private Coroutine movePanel;
     public void MoveTowardPanel(Vector2 target, RectTransform panel)
     {
-        if (isPanelMove)
+        if (movePanel != null)
         {
+            StopCoroutine(movePanel);
             isPanelMove = false;
-            return;
         }
-        StartCoroutine(MovePanel(target, panel));
+        movePanel = StartCoroutine(MovePanel(target, panel));
     }
 
     IEnumerator MovePanel(Vector2 target, RectTransform panel)
@@ -53,21 +73,22 @@ public class UIManager : MonoBehaviour
         isPanelMove = true;
         if (panel.anchoredPosition.x < target.x)
         {
-            while (isPanelMove && panel.anchoredPosition.x < target.x - 1)
+            while (isPanelMove && panel.anchoredPosition.x < target.x - 5)
             {
-                panel.anchoredPosition = Vector2.Lerp(panel.anchoredPosition, target, Time.deltaTime * 10);
+                panel.anchoredPosition = Vector2.Lerp(panel.anchoredPosition, target, Time.deltaTime * 5);
                 yield return null;
             }
         }
         else
         {
-            while (isPanelMove && panel.anchoredPosition.x > target.x + 1)
+            while (isPanelMove && panel.anchoredPosition.x > target.x + 5)
             {
                 panel.anchoredPosition = Vector2.Lerp(panel.anchoredPosition, target, Time.deltaTime * 5);
                 yield return null;
             }
         }
         isPanelMove = false;
+        movePanel = null;
     }
 
     public void UpdateTutorialText(string txt)
