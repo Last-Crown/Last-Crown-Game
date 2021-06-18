@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,10 +18,11 @@ public class ServerInitializer : MonoBehaviour
     public Socket socket;
 
     public string playerName = "";
+    public GameObject playerObject;
 
-    private JSONNode json = JSONNode.Parse("");
+    public JSONNode json = JSONNode.Parse("");
     public Queue<KeyValuePair<string, JSONNode>> customEventQueue = new Queue<KeyValuePair<string, JSONNode>>();
-    private List<GameObject> playerObjectList = new List<GameObject>();
+    public List<GameObject> playerObjectList = new List<GameObject>();
 
     private bool joinedGame = false;
 
@@ -34,7 +36,6 @@ public class ServerInitializer : MonoBehaviour
         instance = this;
 
         DontDestroyOnLoad(gameObject);
-        loadbar = GameObject.FindWithTag("LoadBar").GetComponent<Slider>();
 
         socket = IO.Socket("http://localhost:15555");
 
@@ -76,14 +77,11 @@ public class ServerInitializer : MonoBehaviour
             customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("delete name", parsedData));
         });
 
-        socket.On("update data", (data) =>
+        socket.On("set data", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            if (customEventQueue.Count == 0)
-            {
-                customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("update data", parsedData));
-            }
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set data", parsedData));
         });
     }
 
@@ -116,6 +114,11 @@ public class ServerInitializer : MonoBehaviour
                     currentPlayerObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, value["rot"]);
                 }
             }
+
+            if (customEventQueue.Count == 0)
+            {
+                socket.Emit("get data");
+            }
         }
 
         if (customEventQueue.Count > 0)
@@ -127,6 +130,7 @@ public class ServerInitializer : MonoBehaviour
             {
                 case "connected":
                     Debug.Log("Connected!");
+                    loadbar = GameObject.FindWithTag("LoadBar").GetComponent<Slider>();
                     loadbar.value += 0.5f;
                     loadbar.transform.Find("Text").GetComponent<Text>().text = "Collecting version..";
                     socket.Emit("get ver", version);
@@ -168,7 +172,7 @@ public class ServerInitializer : MonoBehaviour
                     else if (currentEvent.Value["state"] == "OK")
                     {
                         SceneManager.LoadScene("GameScene");
-                        joinedGame = true;
+                        json = currentEvent.Value;
 
                         socket.Emit("get seed");
                     }
@@ -179,18 +183,20 @@ public class ServerInitializer : MonoBehaviour
 
                     mapGenerator.UpdateSeed(currentEvent.Value);
                     StartCoroutine(mapGenerator.GenerateMap());
+                    json = "";
+                    joinedGame = true;
                     socket.Emit("get data");
 
                     break;
                 case "delete name":
                     GameObject currentPlayerObject = GameObject.Find(currentEvent.Value["name"]);
-                    
+
                     playerObjectList.Remove(currentPlayerObject);
                     Destroy(currentPlayerObject);
 
-                    foreach(var value in json)
+                    foreach (var value in json)
                     {
-                        if(value.Value["name"] == currentEvent.Value["name"])
+                        if (value.Value["name"] == currentEvent.Value["name"])
                         {
                             json.Remove(value);
                             break;
@@ -198,9 +204,8 @@ public class ServerInitializer : MonoBehaviour
                     }
 
                     break;
-                case "update data":
+                case "set data":
                     json = currentEvent.Value;
-                    socket.Emit("get data");
 
                     break;
             }

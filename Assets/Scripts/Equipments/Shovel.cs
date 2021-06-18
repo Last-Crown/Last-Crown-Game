@@ -12,6 +12,7 @@ public class Shovel : Equipment
         originRot = new Vector3(0, 0, 90);
         originScale = new Vector3(0.75f, 0.75f, 1);
 
+        damage = 1;
         attackSpeed = 1;
         animString = "useShovel";
     }

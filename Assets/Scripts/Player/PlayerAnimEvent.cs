@@ -4,31 +4,37 @@ using UnityEngine;
 
 public class PlayerAnimEvent : MonoBehaviour
 {
-    private GameObject FrontObject;
+    private GameObject frontObject;
 
-    public void HitByHand()
+    public void Hit(eEquipment tool)
     {
-        FrontObject?.GetComponent<HarvestableResource>().Harvest(0.3f, eEquipment.None);
-    }
-    public void HitByAxe(eEquipment tool)
-    {
-        FrontObject?.GetComponent<HarvestableResource>().Harvest(1, tool);
-    }
-    public void HitByPickAxe(eEquipment tool)
-    {
-        FrontObject?.GetComponent<HarvestableResource>().Harvest(1, tool);
+        PlayerAction playerAction = transform.GetComponent<PlayerAction>();
+        Equipment equipment = playerAction.myEquipmentsDict[playerAction.whatsInHand];
+        float damage;
+
+        if (equipment == null)
+        {
+            damage = 0.3f;
+        }
+        else
+        {
+            damage = equipment.damage;
+        }
+
+
+        frontObject?.GetComponent<HarvestableResource>().Harvest(damage, eEquipment.None);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Tree") || collision.CompareTag("Rock"))
         {
-            FrontObject ??= collision.gameObject;   // FrontObject가 null이면 대입
+            frontObject ??= collision.gameObject;   // frontObject가 null이면 대입
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        FrontObject = null;
+        frontObject = null;
     }
 }
