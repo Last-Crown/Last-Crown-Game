@@ -23,13 +23,23 @@ public class PlayerAnimEvent : MonoBehaviour
 
         if (GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().playerName == gameObject.name)
         {
-            frontObject?.GetComponent<HarvestableResource>().Harvest(damage, eEquipment.None);
+            if (frontObject)
+            {
+                if (frontObject.CompareTag("Player"))
+                {
+                    frontObject.GetComponent<PlayerHealth>().OnDamage(damage);
+                }
+                else
+                {
+                    frontObject.GetComponent<HarvestableResource>().Harvest(damage, tool);
+                }
+            }   
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Tree") || collision.CompareTag("Rock"))
+        if (collision.CompareTag("Player") || collision.CompareTag("Tree") || collision.CompareTag("Rock"))
         {
             frontObject ??= collision.gameObject;   // frontObject가 null이면 대입
         }

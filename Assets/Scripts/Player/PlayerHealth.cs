@@ -16,6 +16,8 @@ public class PlayerHealth : LivingEntity
     {
         base.OnDamage(damage);
 
-        UIManager.Instance.UpdateHealth(maxHealth, health);
+
+
+        //UIManager.Instance.UpdateHealth(maxHealth, health);
     }
 }

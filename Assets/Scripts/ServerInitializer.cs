@@ -17,6 +17,8 @@ public class ServerInitializer : MonoBehaviour
 
     public Socket socket;
 
+    public GameObject connectFailedPopup;
+
     public string playerName = "";
     public GameObject playerObject;
 
@@ -38,7 +40,10 @@ public class ServerInitializer : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        socket = IO.Socket("http://server.hyunwoo.kim:15555");
+        connectFailedPopup = GameObject.Find("ConnectFailed");
+        connectFailedPopup.SetActive(false);
+
+        socket = IO.Socket("http://localhost:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
@@ -82,22 +87,24 @@ public class ServerInitializer : MonoBehaviour
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set playerData", parsedData));
+            if (customEventQueue.Count <= 5)
+                customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set playerData", parsedData));
         });
 
         socket.On("set worldData", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set worldData", parsedData));
+            if (customEventQueue.Count <= 5)
+                customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set worldData", parsedData));
         });
 
         socket.On("play playerAnimation", (data) =>
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            if(customEventQueue.Count <= 10)
-            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("play playerAnimation", parsedData));
+            if (customEventQueue.Count <= 10)
+                customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("play playerAnimation", parsedData));
         });
     }
 
@@ -107,22 +114,29 @@ public class ServerInitializer : MonoBehaviour
         {
             foreach (var value in playerData.Values)
             {
+                GameObject currentPlayerObject = playerObjectList.Find(obj =>
+                {
+                    return obj.name == value["name"];
+                });
+
+                if (currentPlayerObject == null)
+                {
+                    currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
+                    currentPlayerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
+                    currentPlayerObject.name = value["name"];
+
+                    playerObjectList.Add(currentPlayerObject);
+                }
+
+                currentPlayerObject.GetComponent<PlayerHealth>().SetHealth(value["health"]);
+
+                PlayerInfo playerInfo = currentPlayerObject.GetComponent<PlayerInfo>();
+
+                playerInfo.WoodCount = value["inventory"]["wood"];
+                playerInfo.StoneCount = value["inventory"]["stone"];
+
                 if (value["name"] != playerName)
                 {
-                    GameObject currentPlayerObject = playerObjectList.Find(obj =>
-                    {
-                        return obj.name == value["name"];
-                    });
-
-                    if (currentPlayerObject == null)
-                    {
-                        currentPlayerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
-                        currentPlayerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = value["name"];
-                        currentPlayerObject.name = value["name"];
-
-                        playerObjectList.Add(currentPlayerObject);
-                    }
-
                     Vector3 targetPosition = new Vector3(value["pos"]["x"], value["pos"]["y"], 0);
                     Vector3 nowPosotion = currentPlayerObject.transform.position;
 
@@ -131,11 +145,11 @@ public class ServerInitializer : MonoBehaviour
                 }
             }
 
-            foreach(var value in worldData)
+            foreach (var value in worldData)
             {
                 GameObject currentObject = GameObject.Find(value.Key);
 
-                if(currentObject)
+                if (currentObject)
                 {
                     HarvestableResource harvestableResource = currentObject.GetComponent<HarvestableResource>();
 
@@ -167,7 +181,7 @@ public class ServerInitializer : MonoBehaviour
                 case "get ver":
                     if (currentEvent.Value["state"] == "ER")
                     {
-                        Debug.LogError(currentEvent.Value["data"]["message"]);
+                        connectFailedPopup.SetActive(true);
 
                         Destroy(gameObject);
                     }
@@ -193,7 +207,7 @@ public class ServerInitializer : MonoBehaviour
                 case "set name":
                     if (currentEvent.Value["state"] == "ER")
                     {
-                        Debug.LogError(currentEvent.Value["data"]["message"]);
+                        GameObject.Find("Managers").GetComponent<MainSceneManager>().EnableNameError(currentEvent.Value["data"]["message"]);
 
                         break;
                     }
