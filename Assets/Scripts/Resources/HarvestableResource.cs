@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 
-public enum eHarResource    // harvestable resource
+public enum eResource    // harvestable resource
 {
     None, Tree, Rock
 }
@@ -12,7 +12,7 @@ public class HarvestableResource : MonoBehaviour
 {
     public float hitLimit;
 
-    protected eHarResource Kinds { get; set; }
+    protected eResource Kinds { get; set; }
     protected eEquipment MatchedTool { get; set; }
 
     public virtual void Harvest(float damage, eEquipment tool)

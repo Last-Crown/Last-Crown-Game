@@ -140,11 +140,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2444567702905187631, guid: 545f62a6ec29b9c47a99ae04893ea069, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.26
+      value: 3.69
       objectReference: {fileID: 0}
     - target: {fileID: 2444567702905187631, guid: 545f62a6ec29b9c47a99ae04893ea069, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.99
+      value: 0.43
       objectReference: {fileID: 0}
     - target: {fileID: 2444567702905187631, guid: 545f62a6ec29b9c47a99ae04893ea069, type: 3}
       propertyPath: m_LocalPosition.z
@@ -955,6 +955,18 @@ MonoBehaviour:
   attackSpeed: 2
   woodCount: 0
   stoneCount: 0
+--- !u!114 &756684912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756684903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe29eb81e05f14d49ac5defcf37586a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &769542170
 GameObject:
   m_ObjectHideFlags: 0
