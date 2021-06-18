@@ -38,7 +38,7 @@ public class ServerInitializer : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        socket = IO.Socket("http://server.hyunwoo.kim:15555");
+        socket = IO.Socket("http://localhost:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
@@ -82,7 +82,6 @@ public class ServerInitializer : MonoBehaviour
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
-            Debug.Log(parsedData);
             customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set playerData", parsedData));
         });
 
@@ -91,6 +90,13 @@ public class ServerInitializer : MonoBehaviour
             JSONNode parsedData = JSON.Parse(data.ToString());
 
             customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("set worldData", parsedData));
+        });
+
+        socket.On("play playerAnimation", (data) =>
+        {
+            JSONNode parsedData = JSON.Parse(data.ToString());
+
+            customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("play playerAnimation", parsedData));
         });
     }
 
@@ -139,7 +145,6 @@ public class ServerInitializer : MonoBehaviour
             if (customEventQueue.Count == 0)
             {
                 socket.Emit("get playerData");
-                socket.Emit("get worldData");
             }
         }
 
@@ -233,6 +238,15 @@ public class ServerInitializer : MonoBehaviour
                     break;
                 case "set worldData":
                     worldData = currentEvent.Value;
+
+                    break;
+                case "play playerAnimation":
+                    currentPlayerObject = playerObjectList.Find(obj =>
+                    {
+                        return obj.name == currentEvent.Value;
+                    });
+
+                    currentPlayerObject.GetComponent<Animator>();
 
                     break;
             }

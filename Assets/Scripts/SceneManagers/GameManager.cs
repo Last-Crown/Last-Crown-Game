@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
         playerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
         playerObject.AddComponent<PlayerMovement>();
+        playerObject.AddComponent<PlayerAction>();
         playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
         playerObject.transform.position = new Vector3(json["pos"]["x"], json["pos"]["y"], 0);
