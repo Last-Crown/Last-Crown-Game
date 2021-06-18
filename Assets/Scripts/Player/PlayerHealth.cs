@@ -18,9 +18,4 @@ public class PlayerHealth : LivingEntity
 
         UIManager.Instance.UpdateHealth(maxHealth, health);
     }
-
-    public override void OnDie()
-    {
-        base.OnDie();
-    }
 }

@@ -7,12 +7,17 @@ public class PlayerInfo : MonoBehaviour
     public float attackSpeed;
     public int woodCount, stoneCount;
 
+    private float playerMaxHealth, playerHealth;
+
     private void Start()
     {
         WoodCount = 0;
         StoneCount = 0;
+
+        playerMaxHealth = Health = 100;
     }
 
+    // Resources
     public int WoodCount 
     {
         get => woodCount;
@@ -33,13 +38,25 @@ public class PlayerInfo : MonoBehaviour
         }
     }
 
+    // PlayerStat
     public float AttackSpeed 
     {
         get => attackSpeed;
         set
         {
-            attackSpeed = value;
             // AttackSpeed Updated
+            attackSpeed = value;
+        }
+    }
+
+    public float Health
+    {
+        get => playerHealth;
+        set
+        {
+            // Health Updated
+            playerHealth = value;
+            UIManager.Instance.UpdateHealth(playerMaxHealth, value);
         }
     }
 }
