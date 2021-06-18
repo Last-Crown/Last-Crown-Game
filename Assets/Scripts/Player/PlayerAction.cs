@@ -69,11 +69,16 @@ public class PlayerAction : MonoBehaviour
         ChangeEquipment(myEquipmentsDict[obj]);
     }
 
-    public void PickEquipment()
+    public void Pick_or_CycleEquipment()
     {
+        // Cycle
         if (!canPickTool || nearByTool == null)
+        {
+            CycleTools();
             return;
+        }
 
+        // Pick
         if (toolsList.Count >= toolCountLimit)
             DropEquipment();
         ChangeEquipment(nearByTool);

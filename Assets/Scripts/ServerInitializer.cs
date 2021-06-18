@@ -43,7 +43,7 @@ public class ServerInitializer : MonoBehaviour
         connectFailedPopup = GameObject.Find("ConnectFailed");
         connectFailedPopup.SetActive(false);
 
-        socket = IO.Socket("http://localhost:15555");
+        socket = IO.Socket("http://192.168.137.1:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {

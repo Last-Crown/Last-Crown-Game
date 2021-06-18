@@ -10,6 +10,9 @@ public class PlayerInfo : MonoBehaviour
 
     private float playerMaxHealth, playerHealth;
 
+    private UIManager ui => _ui ??= GameObject.Find("Managers").GetComponent<UIManager>();
+    private UIManager _ui;
+
     private void Start()
     {
         WoodCount = 0;
@@ -25,7 +28,8 @@ public class PlayerInfo : MonoBehaviour
         set
         {
             woodCount = value;
-            GameObject.Find("Managers").GetComponent<UIManager>().UpdateWoodCount(value);
+            ui.UpdateWoodCount(value);
+            CheckMoneyState();
         }
     }
 
@@ -35,8 +39,17 @@ public class PlayerInfo : MonoBehaviour
         set
         {
             stoneCount = value;
-            GameObject.Find("Managers").GetComponent<UIManager>().UpdateStoneCount(value);
+            ui.UpdateStoneCount(value);
+            CheckMoneyState();
         }
+    }
+
+    private void CheckMoneyState()
+    {
+        if (StoneCount >= 2 && WoodCount >= 1)
+            ui.MoveTowardPanel(new Vector2(250, 110), ui.stoneCreatePanel);
+        else if (WoodCount >= 2)
+            ui.MoveTowardPanel(new Vector2(250, 110), ui.woodCreatePanel);
     }
 
     // PlayerStat
@@ -65,7 +78,6 @@ public class PlayerInfo : MonoBehaviour
             float ratio = playerHealth / playerMaxHealth;
             healthIndicator.fillAmount = ratio;
             healthIndicator.color = new Color(1, ratio, ratio);
-
         }
     }
 }

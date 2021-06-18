@@ -25,7 +25,7 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))   // Pick
-            playerAction.PickEquipment();
+            playerAction.Pick_or_CycleEquipment();
 
         if (Input.GetKeyDown(KeyCode.F))    // Drop
             playerAction.DropEquipment();

@@ -180,7 +180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8647ab45481f6fd47bd7bba6c0596509, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1be60e429e529fa4f8ca6b00b919562e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1175,7 +1175,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 200, y: 170}
+  m_AnchoredPosition: {x: 250, y: 220}
   m_SizeDelta: {x: 116, y: 116}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &339314616
@@ -1545,8 +1545,6 @@ MonoBehaviour:
   rock: {fileID: 1969774682}
   activeButton: {fileID: 1738683715}
   pickCycleButton: {fileID: 769542172}
-  woodCreatePanel: {fileID: 1903595755}
-  createPanel: {fileID: 1117038519}
 --- !u!4 &455500673
 Transform:
   m_ObjectHideFlags: 0
@@ -1576,6 +1574,8 @@ MonoBehaviour:
   woodTxt: {fileID: 593131296}
   stoneTxt: {fileID: 1600651086}
   tutorialTxt: {fileID: 1159038078}
+  stoneCreatePanel: {fileID: 1117038519}
+  woodCreatePanel: {fileID: 1903595755}
 --- !u!1 &480900921
 GameObject:
   m_ObjectHideFlags: 0
@@ -2400,7 +2400,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -192.5, y: 439}
+  m_AnchoredPosition: {x: -200, y: 450}
   m_SizeDelta: {x: 175, y: 175}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &769542172
@@ -3119,7 +3119,7 @@ GameObject:
   - component: {fileID: 1117038521}
   - component: {fileID: 1117038520}
   m_Layer: 5
-  m_Name: CreatePanel
+  m_Name: StoneCreatePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
