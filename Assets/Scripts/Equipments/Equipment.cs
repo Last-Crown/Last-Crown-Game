@@ -15,7 +15,7 @@ public class Equipment : MonoBehaviour
     public float damage, attackSpeed, curTime = 0;
     public bool CanUse => curTime <= 0;
 
-    protected PlayerStats stats;
+    protected PlayerInfo stats;
 
     public virtual void Update()
     {
@@ -25,7 +25,7 @@ public class Equipment : MonoBehaviour
 
     public virtual void Equip(Transform root, Transform hand)
     {
-        stats = root.GetComponent<PlayerStats>();
+        stats = root.GetComponent<PlayerInfo>();
 
         transform.SetParent(hand);
         transform.localPosition = originPos;
