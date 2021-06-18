@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerHealth : LivingEntity
 {
-    public event Action OnDeath;    // Invoke when player dead
+    // public event Action OnDeath;    // Invoke when player dead
 
     private void Start()
     {
