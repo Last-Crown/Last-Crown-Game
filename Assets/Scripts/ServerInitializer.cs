@@ -10,7 +10,7 @@ using SimpleJSON;
 
 public class ServerInitializer : MonoBehaviour
 {
-    private const float version = 1.6f;
+    private const float version = 1.7f;
     private static ServerInitializer instance = null;
 
     private Slider loadbar;
@@ -38,7 +38,7 @@ public class ServerInitializer : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        socket = IO.Socket("http://localhost:15555");
+        socket = IO.Socket("http://server.hyunwoo.kim:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
@@ -96,6 +96,7 @@ public class ServerInitializer : MonoBehaviour
         {
             JSONNode parsedData = JSON.Parse(data.ToString());
 
+            if(customEventQueue.Count <= 10)
             customEventQueue.Enqueue(new KeyValuePair<string, JSONNode>("play playerAnimation", parsedData));
         });
     }
@@ -246,7 +247,7 @@ public class ServerInitializer : MonoBehaviour
                         return obj.name == currentEvent.Value;
                     });
 
-                    currentPlayerObject.GetComponent<Animator>();
+                    currentPlayerObject.GetComponent<PlayerAction>().ActivateEquipment();
 
                     break;
             }

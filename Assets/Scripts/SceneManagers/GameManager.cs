@@ -30,11 +30,12 @@ public class GameManager : MonoBehaviour
         JSONNode json = serverScript.playerData["data"];
 
         playerObject = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Player"));
-        playerObject.AddComponent<PlayerMovement>();
-        playerObject.AddComponent<PlayerAction>();
+        playerObject.AddComponent<PlayerInput>();
         playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
         playerObject.transform.position = new Vector3(json["pos"]["x"], json["pos"]["y"], 0);
+
+        serverScript.playerObjectList.Add(playerObject);
 
         StartCoroutine(UpdateFrameText());
     }

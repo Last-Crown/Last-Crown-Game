@@ -21,8 +21,10 @@ public class PlayerAnimEvent : MonoBehaviour
             damage = equipment.damage;
         }
 
-
-        frontObject?.GetComponent<HarvestableResource>().Harvest(damage, eEquipment.None);
+        if (GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().playerName == gameObject.name)
+        {
+            frontObject?.GetComponent<HarvestableResource>().Harvest(damage, eEquipment.None);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

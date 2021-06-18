@@ -21,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
         playerAnim = GetComponent<Animator>();
     }
 
-
     private void Update()
     {
         if (serverExists && socket == null)
@@ -35,14 +34,9 @@ public class PlayerMovement : MonoBehaviour
             else
                 socket = server.GetComponent<ServerInitializer>().socket;
         }
-
-        if (Input.anyKey) KeyboardMove();
-        if (joyStick.Dir != Vector2.zero) JoystickMove();
-        
-        if (!Input.anyKey && joyStick.Dir == Vector2.zero) playerAnim.SetBool("Walk", false);
     }
 
-    private void KeyboardMove()
+    public void KeyboardMove()
     {
         float dx = Input.GetAxis("Horizontal");
         float dy = Input.GetAxis("Vertical");
@@ -62,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void JoystickMove()
+    public void JoystickMove()
     {
         transform.Translate(speed * Time.deltaTime * joyStick.Dir);
 

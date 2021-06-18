@@ -21,7 +21,6 @@ public class PlayerAction : MonoBehaviour
     public bool canPickTool;
     private int pickableLayer, toolCountLimit;
 
-
     void Awake()
     {
         navRange = 1.2f;
@@ -37,21 +36,6 @@ public class PlayerAction : MonoBehaviour
     private void Start()
     {
         StartCoroutine(NavigateAraund());
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))   // Pick
-            PickEquipment();
-
-        if (Input.GetKeyDown(KeyCode.F))    // Drop
-            DropEquipment();
-
-        if (Input.GetKeyDown(KeyCode.E)) // Tool Cycle
-            CycleTools();
-
-        if (Input.GetKeyDown(KeyCode.Q))    // Tool Activate
-            ActivateEquipment();
     }
 
     public void ActivateEquipment()
@@ -95,7 +79,7 @@ public class PlayerAction : MonoBehaviour
         ChangeEquipment(nearByTool);
     }
 
-    private void DropEquipment()
+    public void DropEquipment()
     {
         if (whatsInHand == eEquipment.None)
             return;
