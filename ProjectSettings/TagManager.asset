@@ -9,7 +9,6 @@ TagManager:
   - Tree
   - Rock
   - LoadBar
-  - Item
   layers:
   - Default
   - TransparentFX

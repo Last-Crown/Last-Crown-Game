@@ -5,23 +5,14 @@ using UnityEngine;
 public class TreeOnGround : HarvestableResource
 {
     public Sprite treeStumpSprite;    // ³ª¹« ¹ØµÕ
+    public Sprite originSprite;
 
     private void Awake()
     {
         hitLimit = 4;
         MatchedTool = eEquipment.Axe;
-        Kinds = eResource.Tree;
+        Kinds = eHarResource.Tree;
     }
 
-    public override void UpdateHitLimit(float _hitLimit)
-    {
-        hitLimit = _hitLimit;
-        if (hitLimit <= 0)
-        {
-            hitLimit = 0;
-            var sr = GetComponent<SpriteRenderer>();
-            sr.sprite = treeStumpSprite;
-            sr.sortingOrder = 1;
-        }
-    }
+    
 }

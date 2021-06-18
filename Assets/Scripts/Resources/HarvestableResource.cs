@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 
-public enum eResource    // harvestable resource
+public enum eHarResource    // harvestable resource
 {
     None, Tree, Rock
 }
@@ -12,7 +12,7 @@ public class HarvestableResource : MonoBehaviour
 {
     public float hitLimit;
 
-    protected eResource Kinds { get; set; }
+    protected eHarResource Kinds { get; set; }
     protected eEquipment MatchedTool { get; set; }
 
     public virtual void Harvest(float damage, eEquipment tool)
@@ -21,9 +21,7 @@ public class HarvestableResource : MonoBehaviour
         {
             JSONNode json = JSONNode.Parse("{ name: " + gameObject.name + " ,type: " + gameObject.tag + " ,health: " + hitLimit + " ,value:" + -damage + " }");
 
-            GameObject.FindWithTag("Server")?.GetComponent<ServerInitializer>().EmitUpdateHealth(json.ToString());
-
-            transform.localScale -= Vector3.one * 0.05f;
+            GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().EmitUpdateHealth(json.ToString());
         }
     }
 

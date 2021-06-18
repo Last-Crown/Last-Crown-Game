@@ -8,6 +8,6 @@ public class RockOnGround : HarvestableResource
     {
         hitLimit = 4;
         MatchedTool = eEquipment.PickAxe;
-        Kinds = eResource.Rock;
+        Kinds = eHarResource.Rock;
     }
 }
