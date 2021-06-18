@@ -9,28 +9,31 @@ public class TutorialManager : MonoBehaviour
     private static TutorialManager instance;
 
     public GameObject maincamera;
-
     public GameObject playerObject;
-    public string playerName;
+    private PlayerInfo playerInfo;
 
+    public string playerName;
 
     private void Awake()
     {
         playerName = "플레이어1";
         maincamera = GameObject.FindWithTag("MainCamera");
         playerObject = GameObject.FindWithTag("Player");
+        playerInfo = playerObject.GetComponent<PlayerInfo>();
     }
 
     void Start()
     {
-        playerObject.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>().text = playerName;
+        playerObject.AddComponent<PlayerMovement>();
+        playerObject.AddComponent<PlayerAction>();
+        playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
     }
 
     private void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.R))
-            playerObject.GetComponent<PlayerHealth>().OnDamage(10);
+            playerInfo.Health -= 10;
 
         maincamera.transform.position = Vector3.Lerp(maincamera.transform.position, playerObject.transform.position + new Vector3(0, 0, -10), Time.deltaTime * 4.5f);
     }

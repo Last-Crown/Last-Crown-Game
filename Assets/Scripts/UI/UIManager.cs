@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
         player = GameObject.FindWithTag("Player"); // TODO: Server에서 플레이어 이름 찾기
         pa = player.GetComponent<PlayerAction>();
 
-        healthIndicator = player.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        healthIndicator = player.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Image>();
     }
 
     public void UpdateWoodCount(int count) => woodTxt.text = count.ToString();

@@ -21,7 +21,7 @@ public class HarvestableResource : MonoBehaviour
         {
             JSONNode json = JSONNode.Parse("{ name: " + gameObject.name + " ,type: " + gameObject.tag + " ,health: " + hitLimit + " ,value:" + -damage + " }");
 
-            GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().EmitUpdateHealth(json.ToString());
+            GameObject.FindWithTag("Server")?.GetComponent<ServerInitializer>().EmitUpdateHealth(json.ToString());
         }
     }
 
