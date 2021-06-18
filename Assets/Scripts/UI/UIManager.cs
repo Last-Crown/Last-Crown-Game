@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
 
     public Text woodTxt;
     public Text stoneTxt;
+    public Text tutorialTxt;
     public Image healthIndicator;
 
     private GameObject player;
@@ -70,5 +71,10 @@ public class UIManager : MonoBehaviour
             }
         }
         isPanelMove = false;
+    }
+
+    public void UpdateTutorialText(string txt)
+    {
+        tutorialTxt.text = txt;
     }
 }

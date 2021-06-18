@@ -38,7 +38,7 @@ public class ServerInitializer : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        socket = IO.Socket("http://localhost:15555");
+        socket = IO.Socket("http://192.168.0.12:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {
