@@ -125,8 +125,8 @@ public class TutorialManager : MonoBehaviour
         float playerX = playerObject.transform.position.x;
         float playerY = playerObject.transform.position.y;
 
-        return (playerX > tree.position.x - 0.5f && playerX < tree.position.x + 0.5f &&
-                playerY > tree.position.y - 1.5f && playerY < tree.position.y - 0.5f);
+        return (playerX > tr.position.x - 0.5f && playerX < tr.position.x + 0.5f &&
+                playerY > tr.position.y - 1.5f && playerY < tr.position.y + 0.5f);
     }
 
     private void Step0()
