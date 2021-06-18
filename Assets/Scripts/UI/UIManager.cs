@@ -12,8 +12,6 @@ public class UIManager : MonoBehaviour
     public Text stoneTxt;
     public Image healthIndicator;
 
-    public RectTransform woodPanel;
-
     private GameObject player;
     private PlayerAction pa;
 
@@ -22,14 +20,19 @@ public class UIManager : MonoBehaviour
         player = GameObject.FindWithTag("Player"); // TODO: Server에서 플레이어 이름 찾기
         pa = player.GetComponent<PlayerAction>();
 
-        healthIndicator = player.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Image>();
+        healthIndicator = player.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
     }
 
     public void UpdateWoodCount(int count) => woodTxt.text = count.ToString();
 
     public void UpdateStoneCount(int count) => stoneTxt.text = count.ToString();
 
-    public void UpdateHealth(float maxH, float curH) => healthIndicator.fillAmount = curH / maxH;
+    public void UpdateHealth(float maxH, float curH)
+    {
+        float ratio = curH / maxH;
+        healthIndicator.fillAmount = ratio;
+        healthIndicator.color = new Color(1, ratio, ratio);
+    }
 
     public void ButtonActivate() => pa.ActivateEquipment();
 
@@ -37,27 +40,35 @@ public class UIManager : MonoBehaviour
 
 
     /////
-    public void MoveTowardPanel(Vector2 target)
+    private bool isPanelMove;
+    public void MoveTowardPanel(Vector2 target, RectTransform panel)
     {
-        StartCoroutine(MovePanel(target));
+        if (isPanelMove)
+        {
+            isPanelMove = false;
+            return;
+        }
+        StartCoroutine(MovePanel(target, panel));
     }
 
-    IEnumerator MovePanel(Vector2 target)
+    IEnumerator MovePanel(Vector2 target, RectTransform panel)
     {
-        if (woodPanel.anchoredPosition.x < target.x)
+        isPanelMove = true;
+        if (panel.anchoredPosition.x < target.x)
         {
-            while (woodPanel.anchoredPosition.x < target.x - 1)
+            while (isPanelMove && panel.anchoredPosition.x < target.x - 1)
             {
-                woodPanel.anchoredPosition = Vector2.Lerp(woodPanel.anchoredPosition, target, Time.deltaTime * 5);
+                panel.anchoredPosition = Vector2.Lerp(panel.anchoredPosition, target, Time.deltaTime * 10);
                 yield return null;
             }
         } else
         {
-            while (woodPanel.anchoredPosition.x > target.x + 1)
+            while (isPanelMove && panel.anchoredPosition.x > target.x + 1)
             {
-                woodPanel.anchoredPosition = Vector2.Lerp(woodPanel.anchoredPosition, target, Time.deltaTime * 5);
+                panel.anchoredPosition = Vector2.Lerp(panel.anchoredPosition, target, Time.deltaTime * 5);
                 yield return null;
             }
         }
+        isPanelMove = false;
     }
 }

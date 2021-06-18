@@ -22,7 +22,7 @@ public class PlayerAnimEvent : MonoBehaviour
         }
 
 
-        frontObject?.GetComponent<HarvestableResource>().Harvest(damage, eEquipment.None);
+        frontObject?.GetComponent<HarvestableResource>().Harvest(damage, tool);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

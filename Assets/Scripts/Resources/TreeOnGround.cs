@@ -19,8 +19,9 @@ public class TreeOnGround : HarvestableResource
         if (hitLimit <= 0)
         {
             hitLimit = 0;
-            GetComponent<SpriteRenderer>().sprite = treeStumpSprite;
-            transform.localScale = new Vector3(0.5f, 0.5f, 1);
+            var sr = GetComponent<SpriteRenderer>();
+            sr.sprite = treeStumpSprite;
+            sr.sortingOrder = 1;
         }
     }
 }

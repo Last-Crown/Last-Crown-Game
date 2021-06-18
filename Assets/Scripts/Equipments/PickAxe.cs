@@ -14,6 +14,6 @@ public class PickAxe : Equipment
 
         damage = 1;
         attackSpeed = 1;
-        animString = "useAxe";
+        animString = "usePickAxe";
     }
 }

@@ -28,7 +28,7 @@ public class TutorialManager : MonoBehaviour
     {
         playerObject.AddComponent<PlayerMovement>();
         playerObject.AddComponent<PlayerAction>();
-        playerObject.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text = playerName;
+        playerObject.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>().text = playerName;
         playerObject.name = playerName;
     }
 
@@ -39,9 +39,16 @@ public class TutorialManager : MonoBehaviour
 
     // Tutorial Scenario
     public string[] sentences;
+    public Transform tree;
+    public Transform rock;
+
+    [Header("UI")]
     public Button activeButton;
     public Button pickCycleButton;
-    public Transform tree;
+    public RectTransform woodCreatePanel;
+    public RectTransform createPanel;
+
+    private GameObject pickAxe;
 
     private int step = 0;
     private bool step0_btn_click;
@@ -54,18 +61,51 @@ public class TutorialManager : MonoBehaviour
                 step0_btn_click = true;
                 playerAnim.SetTrigger("useHand");
                 break;
+            case 2:
+                pickAxe.GetComponent<Equipment>().Use(playerAnim);
+                
+                if (!IsFront(rock))
+                    playerInfo.StoneCount += 20;
+                if (playerInfo.StoneCount >= 100)
+                {
+                    Debug.Log("조합창에서 칼을 만들어주세요.");
+                    UIManager.Instance.MoveTowardPanel(new Vector2(250, 110), createPanel);
+                    step++;
+                }
+                break;
         }
     }
 
-    public void OnClickPickAxe()
+    public void OnClickCreatePickAxe()
     {
+        // 조합창에서 곡괭이 클릭
         playerInfo.WoodCount -= 130;
-        UIManager.Instance.MoveTowardPanel(new Vector2(-210, 110));
+        UIManager.Instance.MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
 
-        var pickAxe = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/PickAxe"));
+        pickAxe = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/PickAxe"));
         var e = pickAxe.GetComponent<Equipment>();
         playerObject.GetComponent<PlayerAction>().ChangeEquipment(e);
         step++;
+
+        Debug.Log("곡괭이로 돌을 쳐서 돌 자원을 얻으세요.");
+    }
+
+    public void OnClickCreateSword()
+    {
+        // 조합창에서 칼 클릭
+        playerInfo.WoodCount -= 70;
+        playerInfo.StoneCount -= 30;
+        UIManager.Instance.MoveTowardPanel(new Vector2(-250, 110), createPanel);
+
+        var sword = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/ShortSword"));
+        var e = sword.GetComponent<Equipment>();
+
+        Destroy(playerObject.transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).gameObject);    // 곡괭이 삭제
+
+        e.Equip(playerObject.transform, playerObject.transform.GetChild(0).GetChild(1).GetChild(1));    // right hand
+        step++;
+
+        Debug.Log("전장에서 봅시다!");
     }
 
     private void Update()
@@ -76,15 +116,23 @@ public class TutorialManager : MonoBehaviour
             case 2: Step2(); break;
             case 3: Step3(); break;
         }
+        if (Input.GetKeyDown(KeyCode.R))
+            playerInfo.Health -= 10;
     }
 
-    private void Step0()
+    private bool IsFront(Transform tr)
     {
         float playerX = playerObject.transform.position.x;
         float playerY = playerObject.transform.position.y;
 
-        if (playerX < tree.position.x - 0.5f || playerX > tree.position.x + 0.5f ||
-            playerY < tree.position.y - 1.5f || playerY > tree.position.y - 0.5f)
+        return (playerX > tree.position.x - 0.5f && playerX < tree.position.x + 0.5f &&
+                playerY > tree.position.y - 1.5f && playerY < tree.position.y - 0.5f);
+    }
+
+    private void Step0()
+    {
+
+        if (!IsFront(tree))
         {
             Debug.Log("나무 앞으로 가주세요.");
             activeButton.enabled = false;
@@ -97,8 +145,8 @@ public class TutorialManager : MonoBehaviour
             {
                 tree.GetComponent<TreeOnGround>().UpdateHitLimit(0);
                 playerInfo.WoodCount += 200;
-                Debug.Log("나무 자원 200개를 획득했습니다.\n왼쪽 구매창에서 나무 곡괭이를 구매해주세요");
-                UIManager.Instance.MoveTowardPanel(new Vector2(210, 110));
+                Debug.Log("나무 자원 200개를 획득했습니다.\n왼쪽 조합창에서 나무 곡괭이를 만들어주세요.");
+                UIManager.Instance.MoveTowardPanel(new Vector2(250, 110), woodCreatePanel);
                 step++;
             }
         }
