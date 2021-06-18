@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum eEquipment
 {
-    None, Axe, Hammer, PickAxe, Shovel
+    None, Axe, Hammer, PickAxe, Shovel, Sword
 }
 
 public class Equipment : MonoBehaviour
