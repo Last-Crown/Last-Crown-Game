@@ -46,17 +46,89 @@ public class UIManager : MonoBehaviour
     // Panel Button Click
     public void ButtonWoodAxe()
     {
-        if (pi.WoodCount < 2)
+        if (pi.WoodCount < 20)
             return;
 
-        JSONNode json = JSONNode.Parse("{ type: wood, value: " + -2 + " }");
+        RequestServer1(20);
+        InstantiateTools("Prefabs/Tools/WoodAxe");
+        
+        MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
+    }
 
+    public void ButtonWoodPickAxe()
+    {
+        if (pi.WoodCount < 20)
+            return;
+
+        RequestServer1(20);
+        InstantiateTools("Prefabs/Tools/WoodPickAxe");
+
+        MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
+    }
+
+    public void ButtonWoodSword()
+    {
+        if (pi.WoodCount < 20)
+            return;
+
+        RequestServer1(20);
+        InstantiateTools("Prefabs/Tools/WoodSword");
+
+        MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
+    }
+
+    public void ButtonStoneAxe()
+    {
+        if (pi.WoodCount < 10 || pi.StoneCount < 20)
+            return;
+
+        RequestServer2(10, 20);
+        InstantiateTools("Prefabs/Tools/Axe");
+
+        MoveTowardPanel(new Vector2(-250, 110), stoneCreatePanel);
+    }
+
+    public void ButtonStonePickAxe()
+    {
+        if (pi.WoodCount < 10 || pi.StoneCount < 20)
+            return;
+
+        RequestServer2(10, 20);
+        InstantiateTools("Prefabs/Tools/PickAxe");
+
+        MoveTowardPanel(new Vector2(-250, 110), stoneCreatePanel);
+    }
+
+    public void ButtonStoneSword()
+    {
+        if (pi.WoodCount < 10 || pi.StoneCount < 20)
+            return;
+
+        RequestServer2(10, 20);
+        InstantiateTools("Prefabs/Tools/Sword");
+
+        MoveTowardPanel(new Vector2(-250, 110), stoneCreatePanel);
+    }
+
+    private void RequestServer1(int n)
+    {
+        JSONNode json = JSONNode.Parse("{ type: wood, value: " + -n + " }");
         GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().socket.Emit("update inventory", json.ToString());
+    }
 
-        var woodAxe = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/WoodAxe"));
+    private void RequestServer2(int n1, int n2)
+    {
+        RequestServer1(n1);
+
+        JSONNode json = JSONNode.Parse("{ type: stone, value: " + -n2 + " }");
+        GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().socket.Emit("update inventory", json.ToString());
+    }
+
+    private void InstantiateTools(string path)
+    {
+        var woodAxe = Instantiate(Resources.Load<GameObject>(path));
         var e = woodAxe.GetComponent<Equipment>();
         pa.ChangeEquipment(e);
-        MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
     }
 
     /////
