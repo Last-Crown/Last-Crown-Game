@@ -46,10 +46,15 @@ public class PlayerInfo : MonoBehaviour
 
     private void CheckMoneyState()
     {
-        if (StoneCount >= 2 && WoodCount >= 1)
-            ui.MoveTowardPanel(new Vector2(250, 110), ui.stoneCreatePanel);
-        else if (WoodCount >= 2)
+        if (WoodCount >= 2)
             ui.MoveTowardPanel(new Vector2(250, 110), ui.woodCreatePanel);
+        else if (StoneCount >= 2 && WoodCount >= 1)
+            ui.MoveTowardPanel(new Vector2(250, 110), ui.stoneCreatePanel);
+        else
+        {
+            ui.MoveTowardPanel(new Vector2(-250, 110), ui.stoneCreatePanel);
+            ui.MoveTowardPanel(new Vector2(-250, 110), ui.woodCreatePanel);
+        }
     }
 
     // PlayerStat

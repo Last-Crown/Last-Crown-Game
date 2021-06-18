@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using SimpleJSON;
 
 public class UIManager : MonoBehaviour
 {
@@ -47,8 +48,11 @@ public class UIManager : MonoBehaviour
     {
         if (pi.WoodCount < 2)
             return;
-        pi.WoodCount -= 2;
-        Debug.Log(pi.WoodCount);
+
+        JSONNode json = JSONNode.Parse("{ type: wood, value: " + -2 + " }");
+
+        GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().socket.Emit("update inventory", json.ToString());
+
         var woodAxe = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/WoodAxe"));
         var e = woodAxe.GetComponent<Equipment>();
         pa.ChangeEquipment(e);
