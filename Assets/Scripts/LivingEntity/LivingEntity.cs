@@ -19,6 +19,7 @@ public class LivingEntity : MonoBehaviour
     public virtual void SetHealth(float _health)
     {
         health = _health;
+        GetComponent<PlayerInfo>().Health = _health;
 
         if (!IsAlive)
         {

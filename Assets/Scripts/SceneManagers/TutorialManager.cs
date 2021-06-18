@@ -71,8 +71,8 @@ public class TutorialManager : MonoBehaviour
                     playerInfo.StoneCount += 20;
                 if (playerInfo.StoneCount >= 100)
                 {
-                    UIManager.Instance.UpdateTutorialText("조합창에서 칼을 만들어주세요.");
-                    UIManager.Instance.MoveTowardPanel(new Vector2(250, 110), createPanel);
+                    GameObject.Find("Managers").GetComponent<UIManager>().UpdateTutorialText("조합창에서 칼을 만들어주세요.");
+                    GameObject.Find("Managers").GetComponent<UIManager>().MoveTowardPanel(new Vector2(250, 110), createPanel);
                     step++;
                 }
                 break;
@@ -83,14 +83,14 @@ public class TutorialManager : MonoBehaviour
     {
         // 조합창에서 곡괭이 클릭
         playerInfo.WoodCount -= 130;
-        UIManager.Instance.MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
+        GameObject.Find("Managers").GetComponent<UIManager>().MoveTowardPanel(new Vector2(-250, 110), woodCreatePanel);
 
         pickAxe = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/PickAxe"));
         var e = pickAxe.GetComponent<Equipment>();
         playerObject.GetComponent<PlayerAction>().ChangeEquipment(e);
         step++;
 
-        UIManager.Instance.UpdateTutorialText("곡괭이로 돌을 쳐서 돌 자원을 얻으세요.");
+        GameObject.Find("Managers").GetComponent<UIManager>().UpdateTutorialText("곡괭이로 돌을 쳐서 돌 자원을 얻으세요.");
     }
 
     public void OnClickCreateSword()
@@ -98,7 +98,7 @@ public class TutorialManager : MonoBehaviour
         // 조합창에서 칼 클릭
         playerInfo.WoodCount -= 70;
         playerInfo.StoneCount -= 30;
-        UIManager.Instance.MoveTowardPanel(new Vector2(-250, 110), createPanel);
+        GameObject.Find("Managers").GetComponent<UIManager>().MoveTowardPanel(new Vector2(-250, 110), createPanel);
 
         var sword = Instantiate(Resources.Load<GameObject>("Prefabs/Tools/ShortSword"));
         var e = sword.GetComponent<Equipment>();
@@ -108,7 +108,7 @@ public class TutorialManager : MonoBehaviour
         e.Equip(playerObject.transform, playerObject.transform.GetChild(0).GetChild(1).GetChild(1));    // right hand
         step++;
 
-        UIManager.Instance.UpdateTutorialText("전장에서 봅시다!");
+        GameObject.Find("Managers").GetComponent<UIManager>().UpdateTutorialText("전장에서 봅시다!");
         levelLoader.GetComponent<LevelLoader>().LoadScene("ConnectScene");
     }
 
@@ -134,19 +134,19 @@ public class TutorialManager : MonoBehaviour
 
         if (!IsFront(tree))
         {
-            UIManager.Instance.UpdateTutorialText("나무 앞으로 가주세요.");
+            GameObject.Find("Managers").GetComponent<UIManager>().UpdateTutorialText("나무 앞으로 가주세요.");
             activeButton.enabled = false;
             step0_btn_click = false;
         } else
         {
-            UIManager.Instance.UpdateTutorialText("액티브 버튼을 눌러 나무를 파괴하고 자원을 얻으세요.");
+            GameObject.Find("Managers").GetComponent<UIManager>().UpdateTutorialText("액티브 버튼을 눌러 나무를 파괴하고 자원을 얻으세요.");
             activeButton.enabled = true;
             if (step0_btn_click)
             {
                 tree.GetComponent<TreeOnGround>().UpdateHitLimit(0);
                 playerInfo.WoodCount += 200;
-                UIManager.Instance.UpdateTutorialText("나무 자원 200개를 획득했습니다.\n왼쪽 조합창에서 나무 곡괭이를 만들어주세요.");
-                UIManager.Instance.MoveTowardPanel(new Vector2(250, 110), woodCreatePanel);
+                GameObject.Find("Managers").GetComponent<UIManager>().UpdateTutorialText("나무 자원 200개를 획득했습니다.\n왼쪽 조합창에서 나무 곡괭이를 만들어주세요.");
+                GameObject.Find("Managers").GetComponent<UIManager>().MoveTowardPanel(new Vector2(250, 110), woodCreatePanel);
                 step++;
             }
         }

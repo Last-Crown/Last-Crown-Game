@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerInfo : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class PlayerInfo : MonoBehaviour
         set
         {
             woodCount = value;
-            UIManager.Instance.UpdateWoodCount(value);
+            GameObject.Find("Managers").GetComponent<UIManager>().UpdateWoodCount(value);
         }
     }
 
@@ -34,7 +35,7 @@ public class PlayerInfo : MonoBehaviour
         set
         {
             stoneCount = value;
-            UIManager.Instance.UpdateStoneCount(value);
+            GameObject.Find("Managers").GetComponent<UIManager>().UpdateStoneCount(value);
         }
     }
 
@@ -56,7 +57,15 @@ public class PlayerInfo : MonoBehaviour
         {
             // Health Updated
             playerHealth = value;
-            UIManager.Instance.UpdateHealth(playerMaxHealth, value);
+            
+            PlayerAction pa = GetComponent<PlayerAction>();
+
+            Image healthIndicator = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+            
+            float ratio = playerHealth / playerMaxHealth;
+            healthIndicator.fillAmount = ratio;
+            healthIndicator.color = new Color(1, ratio, ratio);
+
         }
     }
 }

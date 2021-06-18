@@ -37,7 +37,8 @@ public class PlayerInput : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {  // Tool Activate
-            GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().socket.Emit("play playerAnimation");
+            if (GameObject.FindWithTag("Server"))
+                GameObject.FindWithTag("Server").GetComponent<ServerInitializer>().socket.Emit("play playerAnimation");
             playerAction.ActivateEquipment();
         }
 

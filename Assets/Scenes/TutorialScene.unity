@@ -1576,7 +1576,6 @@ MonoBehaviour:
   woodTxt: {fileID: 593131296}
   stoneTxt: {fileID: 1600651086}
   tutorialTxt: {fileID: 1159038078}
-  healthIndicator: {fileID: 0}
 --- !u!1 &480900921
 GameObject:
   m_ObjectHideFlags: 0
@@ -3199,6 +3198,18 @@ MonoBehaviour:
   nearByTool: {fileID: 0}
   whatsInHand: 0
   canPickTool: 0
+--- !u!114 &1031531320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1031531308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d738b994ca1a3469d44d6f21158780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1097026506
 GameObject:
   m_ObjectHideFlags: 0
