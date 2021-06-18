@@ -10,7 +10,7 @@ using SimpleJSON;
 
 public class ServerInitializer : MonoBehaviour
 {
-    private const float version = 1.7f;
+    private const float version = 1.8f;
     private static ServerInitializer instance = null;
 
     private Slider loadbar;
@@ -43,7 +43,7 @@ public class ServerInitializer : MonoBehaviour
         connectFailedPopup = GameObject.Find("ConnectFailed");
         connectFailedPopup.SetActive(false);
 
-        socket = IO.Socket("http://192.168.137.1:15555");
+        socket = IO.Socket("http://server.hyunwoo.kim:15555");
 
         socket.On(Socket.EVENT_CONNECT, () =>
         {

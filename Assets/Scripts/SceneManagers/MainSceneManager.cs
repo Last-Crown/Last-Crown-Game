@@ -29,6 +29,7 @@ public class MainSceneManager : MonoBehaviour
 
     public void OnClickTutorial()
     {
+        Destroy(GameObject.FindWithTag("Server"));
         var loader = GameObject.Find("LevelLoader").GetComponentInChildren<LevelLoader>();
         loader.LoadScene("TutorialScene");
     }
